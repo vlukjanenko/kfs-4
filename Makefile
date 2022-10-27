@@ -6,7 +6,7 @@
 #    By: majosue <majosue@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/12 21:25:37 by majosue           #+#    #+#              #
-#    Updated: 2022/10/23 22:34:11 by majosue          ###   ########.fr        #
+#    Updated: 2022/10/27 14:26:13 by majosue          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ CC = i686-elf-gcc
 CFLAGS = -std=gnu99 -ffreestanding -Wall -Wextra -Werror -fno-builtin \
 -fno-exceptions -fno-stack-protector -nostdlib -nodefaultlibs -MMD
 LINKER = i686-elf-ld
-SRC = kernel/kernel.c boot/boot.s lib/baselib.c
+SRC = kernel/kernel.c boot/boot.s lib/baselib.c kernel/screen.c
 OBJECTS := $(SRC:%.c=%.o)
 OBJECTS := $(OBJECTS:%.s=%.o)
 DPS := $(OBJECTS:%.o=%.d)
@@ -37,7 +37,7 @@ all: $(NAME)
 
 $(NAME): $(OBJECTS)
 	@echo "Linking kernel to $(NAME)..."
-	@$(LINKER) -T linker.ld $(OBJECTS) -o $(NAME)
+	@$(LINKER) -T linker.ld $(OBJECTS) -o $(NAME) -nostdlib -z nodefaultlib
 	@echo "Compilation done for $(NAME)..."
 
 %.o: %.s

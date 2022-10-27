@@ -19,9 +19,9 @@ section .bss
 section .text
 global _start:function (_start.end - _start)
 _start:
-	extern kernel_main
+	extern main
 	mov esp, stack_top
-	call kernel_main
+	call main
 	cli
 .hang: hlt
 	jmp .hang
