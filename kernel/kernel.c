@@ -1,5 +1,9 @@
 #include "stddef.h"
 #include "screen.h"
+#include "GDT.h"
+
+uint8_t status_port();
+uint8_t read_key();
 
 /* with delay to see scroll in progress */
 
@@ -41,5 +45,14 @@ void main(void)
 	terminal_writestring_with_delay("                              ###   ########.fr\n");
 	for (size_t i = 0; i < 17; i++) {
 		terminal_writestring_with_delay("\n");
+	}
+
+	while (1) {
+		if ((status_port() & 1)) {
+			uint8_t code = read_key();
+			if (code == 0x2c) {
+			terminal_writestring("Z pressed\n");
+			}
+		}
 	}
 }
