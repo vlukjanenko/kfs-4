@@ -2,8 +2,8 @@
 #include "screen.h"
 #include "GDT.h"
 
-uint8_t status_port();
-uint8_t read_key();
+uint8_t read_port(int port);
+void write_port(int port, int value);
 
 /* with delay to see scroll in progress */
 
@@ -46,10 +46,11 @@ void main(void)
 	for (size_t i = 0; i < 17; i++) {
 		terminal_writestring_with_delay("\n");
 	}
-
+	write_port(0x3D4, 0x0A);
+	write_port(0x3D5, 0x20);
 	while (1) {
-		if ((status_port() & 1)) {
-			uint8_t code = read_key();
+		if ((read_port(0x64) & 1)) {
+			uint8_t code = read_port(0x60);
 			if (code == 0x2c) {
 			terminal_writestring("Z pressed\n");
 			}

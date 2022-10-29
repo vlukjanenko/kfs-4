@@ -27,14 +27,3 @@ _start:
 	jmp .hang
 .end:
 
-global status_port:function
-status_port:
-	in al, 0x64
-	ret
-.end:
-
-global read_key:function
-read_key:
-	in al, 0x60
-	ret
-.end:
