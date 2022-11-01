@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   GDT.h                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/01 18:58:31 by majosue           #+#    #+#             */
+/*   Updated: 2022/11/01 18:59:06 by majosue          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef GDT_H
 # define GDT_H
 
@@ -9,9 +21,9 @@ struct __attribute__((packed)) GDTR
 	uint32_t base;
 };
 
-extern uint64_t g_table[5];
-extern struct GDTR gdtr;
+extern uint64_t		g_table[5];
+extern struct GDTR	gdtr;
 
-void init_gdt();
+void	init_gdt();
 
 #endif

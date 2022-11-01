@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   screen.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/01 18:57:16 by majosue           #+#    #+#             */
+/*   Updated: 2022/11/01 18:57:37 by majosue          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SCREEN_H
 # define SCREEN_H
 # include "stddef.h"
@@ -42,7 +54,5 @@ void	enable_cursor(uint8_t cursor_start, uint8_t cursor_end);
 void	terminal_del(void);
 void	terminal_save(struct s_terminal *term);
 void	terminal_restore(struct s_terminal *term);
-
-
 
 #endif

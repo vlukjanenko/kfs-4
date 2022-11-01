@@ -1,20 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   kernel.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/01 19:00:59 by majosue           #+#    #+#             */
+/*   Updated: 2022/11/01 19:01:27 by majosue          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "stddef.h"
 #include "screen.h"
 #include "GDT.h"
 #include "baselib.h"
 #include "keyboard.h"
 
-/* with delay to see scroll in progress */
-
-void terminal_writestring_with_delay(const char* data)
+void	terminal_writestring_with_delay(const char* data)
 {
 	for (size_t i = 0; i < 10000000; i++);
 	terminal_writestring(data);
 }
  
-void main(void) 
+void	main(void) 
 {
-	struct s_terminal second_terminal;
+	struct s_terminal	second_terminal;
 
 	terminal_initialize(VGA_COLOR_WHITE, VGA_COLOR_BLACK); 
 	terminal_writestring("                                  :::      ::::::::\n");

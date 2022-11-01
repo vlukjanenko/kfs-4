@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   keyboard.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/01 19:01:32 by majosue           #+#    #+#             */
+/*   Updated: 2022/11/01 19:02:57 by majosue          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "baselib.h"
 #include "stdint.h"
 #include "screen.h"
@@ -41,15 +53,14 @@ static void process_key(uint8_t code)
     }
     if (lalt_state && code == 0x0F) {
         struct s_terminal t;
-        
         t.color = second_terminal->color;
         t.column = second_terminal->column;
         t.row = second_terminal->row;
-        memmove(t.buffer, second_terminal->buffer, sizeof(uint16_t) * VGA_HEIGHT * VGA_WIDTH);
+        memmove(t.buffer, second_terminal->buffer, \
+        sizeof(uint16_t) * VGA_HEIGHT * VGA_WIDTH);
         terminal_save(second_terminal);
         terminal_restore(&t);
     }
-
 }
 
 void poll_keyboard(void* val)
