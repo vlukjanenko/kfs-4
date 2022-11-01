@@ -3,14 +3,45 @@
 #include "stdint.h"
 #include "baselib.h"
 
-static const size_t VGA_WIDTH = 80;
-static const size_t VGA_HEIGHT = 25;
+// так как сделано сейчас только одно окно может быть а оно и есть одно
+// тоесть при переключении надо сохранять текущее и загружать сохраненное
+
+
+//static const size_t VGA_WIDTH = 80;
+//static const size_t VGA_HEIGHT = 25;
 
 static size_t       terminal_row;
 static size_t       terminal_column;
 static uint8_t      terminal_color;
 static uint16_t*    terminal_buffer;
+
+
+void disable_cursor()
+{
+	outb(0x3D4, 0x0A);
+	outb(0x3D5, 0x20);
+}
+
+void update_cursor(int x, int y)
+{
+	uint16_t pos = y * VGA_WIDTH + x;
+ 
+	outb(0x3D4, 0x0F);
+	outb(0x3D5, (uint8_t) (pos & 0xFF));
+	outb(0x3D4, 0x0E);
+	outb(0x3D5, (uint8_t) ((pos >> 8) & 0xFF));
+}
   
+void enable_cursor(uint8_t cursor_start, uint8_t cursor_end)
+{
+	outb(0x3D4, 0x0A);
+	outb(0x3D5, (inb(0x3D5) & 0xC0) | cursor_start);
+ 
+	outb(0x3D4, 0x0B);
+	outb(0x3D5, (inb(0x3D5) & 0xE0) | cursor_end);
+}
+
+
 static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg)
 {
 	return fg | bg << 4;
@@ -75,6 +106,7 @@ void terminal_putchar(char c)
 {
 	if (c == '\n') {
 		terminal_cr();
+		update_cursor(terminal_column, terminal_row);
 		return;
 	}
 	terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
@@ -86,6 +118,7 @@ void terminal_putchar(char c)
 			terminal_row++;
 		}
 	}
+	update_cursor(terminal_column, terminal_row);
 }
  
 void terminal_write(const char* data, size_t size) 
@@ -97,4 +130,32 @@ void terminal_write(const char* data, size_t size)
 void terminal_writestring(const char* data) 
 {
 	terminal_write(data, strlen(data));
+}
+
+void terminal_del(void) {
+	int pos = terminal_row * VGA_WIDTH + terminal_column;
+	if (pos > 0) {
+		pos--;
+		terminal_row = pos / VGA_WIDTH;
+		terminal_column = pos % VGA_WIDTH;
+		terminal_buffer[pos] = vga_entry(' ', terminal_color);
+		update_cursor(terminal_column, terminal_row);
+	}
+}
+
+void terminal_save(struct s_terminal *term)
+{
+	term->row = terminal_row;
+	term->column = terminal_column;
+	term->color = terminal_color;
+	memmove(term->buffer, terminal_buffer, sizeof(*terminal_buffer) * VGA_WIDTH * VGA_HEIGHT);
+}
+
+void terminal_restore(struct s_terminal *term)
+{
+	terminal_row = term->row;
+	terminal_column = term->column;
+	terminal_color = term->color;
+	memmove(terminal_buffer, term->buffer, sizeof(*terminal_buffer) * VGA_WIDTH * VGA_HEIGHT);
+	update_cursor(terminal_column, terminal_row);
 }

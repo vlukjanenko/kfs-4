@@ -44,3 +44,19 @@ void    *memmove(void *dst, const void *src, size_t len)
 	}
 	return (dst);
 }
+
+int	isalpha(int c)
+{
+	if ((c >= 0101 && c <= 0132) || (c >= 0141 && c <= 0172))
+		return (1);
+	else
+		return (0);
+}
+
+int	isprint(int c)
+{
+	if (c >= 0040 && c <= 0176)
+		return (1);
+	else
+		return (0);
+}

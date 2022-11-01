@@ -9,6 +9,6 @@ uint64_t g_table[5] = {
 };
 
 struct GDTR gdtr = {
-	0x4,
+	0x5,
 	(uint32_t)g_table
 };
