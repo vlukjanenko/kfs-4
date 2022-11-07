@@ -6,13 +6,12 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 19:00:59 by majosue           #+#    #+#             */
-/*   Updated: 2022/11/06 13:10:28 by majosue          ###   ########.fr       */
+/*   Updated: 2022/11/07 12:25:32 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "stddef.h"
 #include "screen.h"
-/* #include "GDT.h" */
 #include "baselib.h"
 #include "keyboard.h"
 

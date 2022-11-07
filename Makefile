@@ -6,15 +6,15 @@
 #    By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/12 21:25:37 by majosue           #+#    #+#              #
-#    Updated: 2022/11/07 11:22:20 by majosue          ###   ########.fr        #
+#    Updated: 2022/11/07 12:23:53 by majosue          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = majosue-kernel
 CC = i686-elf-gcc
 CFLAGS = -std=gnu99 -ffreestanding -Wall -Wextra -Werror -fno-builtin \
--fno-exceptions -fno-stack-protector -nostdlib -nodefaultlibs -MMD -g3
-SRC = kernel/kernel.c boot/boot.s lib/baselib.c kernel/screen.c kernel/GDT.c \
+-fno-exceptions -fno-stack-protector -nostdlib -nodefaultlibs -MMD
+SRC = kernel/kernel.c boot/boot.s lib/baselib.c kernel/screen.c \
 lib/ports.s kernel/keyboard.c lib/printf.c
 OBJECTS := $(SRC:%.c=%.o)
 OBJECTS := $(OBJECTS:%.s=%.o)
