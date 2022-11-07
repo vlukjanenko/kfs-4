@@ -1,0 +1,42 @@
+#!/usr/bin/expect
+
+set fdisk_prompt {: }
+
+spawn dd if=/dev/zero of=clean.img bs=1024 count=9216
+expect eof
+spawn fdisk clean.img
+expect $fdisk_prompt
+send "n\r"
+expect $fdisk_prompt
+send "p\r"
+expect $fdisk_prompt
+send "1\r"
+expect $fdisk_prompt
+send "\r"
+expect $fdisk_prompt
+send "\r"
+expect $fdisk_prompt
+send "a\r"
+expect $fdisk_prompt
+send "w\r"
+spawn mkdir tmp
+expect eof
+spawn sudo losetup --show -f -P clean.img
+expect eof
+set loop [ string trim $expect_out(buffer) "\r\n"  ]
+spawn sudo mke2fs ${loop}p1
+expect eof
+spawn sudo mount ${loop}p1 tmp
+expect eof
+spawn sudo mkdir -p tmp/boot/grub
+expect eof
+spawn sudo grub-install --target=i386-pc --modules=part_msdos --boot-directory=tmp/boot ${loop}
+expect eof
+spawn sync
+expect eof
+spawn sudo umount tmp
+expect eof
+spawn rm -rf tmp
+expect eof
+spawn sudo losetup -d ${loop}
+expect eof

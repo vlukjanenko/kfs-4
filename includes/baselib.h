@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 18:58:15 by majosue           #+#    #+#             */
-/*   Updated: 2022/11/01 18:58:20 by majosue          ###   ########.fr       */
+/*   Updated: 2022/11/04 16:53:35 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,17 @@ uint8_t	inb(uint16_t port);
 void	outb(uint16_t port, uint8_t value);
 int		isalpha(int c);
 int		isprint(int c);
+void	bzero(void *s, size_t n);
+int		printf(const char *restrict format, ...);
+char	*strchr(const char *s, int c);
+int     isdigit(int c);
+int     atoi(const char *str);
+char	*strcpy(char *dst, const char *src);
+int     strnequ(char const *s1, char const *s2, size_t n);
+void	*memset(void *b, int c, size_t len);
+void    sitoa_base(long long int value, int base, char *buffer);
+void	sitoa_base_u(unsigned long long int value, int base, char *buffer);
+int     strequ(char const *s1, char const *s2);
+int	    tolower(int c);
 
 #endif
