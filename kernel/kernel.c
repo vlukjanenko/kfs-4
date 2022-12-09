@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 19:00:59 by majosue           #+#    #+#             */
-/*   Updated: 2022/11/07 12:25:32 by majosue          ###   ########.fr       */
+/*   Updated: 2022/11/29 22:07:04 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 #include "screen.h"
 #include "baselib.h"
 #include "keyboard.h"
+#include "multiboot.h"
+
+extern struct multiboot_info* regholder;
 
 void	main(void) 
 {
@@ -57,5 +60,25 @@ void	main(void)
 	printf("\n");
 	printf("Use alt+tab to switch screen\n");
 	enable_cursor(0, 15);
+	printf("flags %#.4x\n", regholder->flags);
+	printf("boot device %#.4x\n", regholder->boot_device);
+	printf("mmap_length %d\n", regholder->mmap_length);
+	printf("mmap_addr %p\n", regholder->mmap_addr);
+	
+	//struct multiboot_mmap_entry *mbi = (struct multiboot_mmap_entry *)regholder->mmap_addr;
+	multiboot_memory_map_t *mmap;
+
+	 for (mmap = (multiboot_memory_map_t *) regholder->mmap_addr;
+           (unsigned long) mmap < regholder->mmap_addr + regholder->mmap_length;
+           mmap = (multiboot_memory_map_t *) ((unsigned long) mmap
+                                    + mmap->size + sizeof (mmap->size)))
+        printf (" size = %#x, base_addr = %.8p,"
+                " length = %#.8x, type = %x\n",
+                (unsigned) mmap->size,
+                (unsigned) (mmap->addr),
+                (unsigned) (mmap->len),
+                (unsigned) mmap->type);
+
+
 	poll_keyboard(&second_terminal);
 }

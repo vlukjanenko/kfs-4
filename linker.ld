@@ -1,11 +1,17 @@
 ENTRY(_start)
 SECTIONS
 {
-	. = 10M;
+	_gdt_start = 0x00000800;
+	. = 1M;
+
+	.gdt _gdt_start :
+	{
+		KEEP(*(.gdt))
+	}
 	.text BLOCK(4K) : ALIGN(4K)
 	{
 		*(.multiboot)
-		*(.text)
+		*(.text)	
 	}
 	.rodata BLOCK(4K) : ALIGN(4K)
 	{

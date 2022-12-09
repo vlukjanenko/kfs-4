@@ -6,7 +6,7 @@
 #    By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/01 19:07:23 by majosue           #+#    #+#              #
-#    Updated: 2022/11/01 19:07:25 by majosue          ###   ########.fr        #
+#    Updated: 2022/11/29 14:55:35 by majosue          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,10 +27,15 @@ section .bss
 	stack_bottom:
 	resb 16384
 	stack_top:
+	global regholder:data
+	regholder:
+		resb 4
 
 section .text
+
 global _start:function (_start.end - _start)
 _start:
+	mov [regholder], ebx
 	extern main
 	mov esp, stack_top
 	call main
@@ -39,3 +44,17 @@ _start:
 	jmp .hang
 .end:
 
+test:
+	extern gdtr
+	lgdt [gdtr]
+	jmp 0x08:complete_flush	
+	ret
+
+complete_flush:
+    mov dx, 0x10
+    mov ds, dx
+    mov es, dx
+    mov fs, dx
+    mov gs, dx
+    mov ss, dx
+    ret
