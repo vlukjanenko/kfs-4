@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 19:01:32 by majosue           #+#    #+#             */
-/*   Updated: 2022/11/01 19:02:57 by majosue          ###   ########.fr       */
+/*   Updated: 2023/01/05 19:34:28 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,29 @@ static uint8_t symbol_table[256] = { 0, 0,
     'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.','/', 0,
     0, 0, ' '};
 
+static void process(const char* buffer)
+{
+    if (strequ("pstack", buffer)) {
+        printf("\n");
+        print_stack();
+    } else if (strequ("", buffer)) {
+        printf("\n");
+    } else {
+        printf("\nUnknown command\n");
+    }
+}
+
 static void process_key(uint8_t code)
 {
     if (isprint(symbol_table[code])) {
-		terminal_putchar(symbol_table[code] - \
+        reset_scroll();
+		terminal_putchar_to_buffer(symbol_table[code] - \
             isalpha(symbol_table[code]) * shift_state * 32);
     }
     if (code == 0x1C) {
-        terminal_putchar('\n');
+        reset_scroll();
+        process(terminal_get_input_buffer());
+        terminal_reset_input_buffer();
     }
     if (code == 0x2A || code == 0x36) {
         shift_state = 1;
@@ -43,6 +58,7 @@ static void process_key(uint8_t code)
         shift_state = 0;
     }
     if (code == 0x0E) {
+        reset_scroll();
         terminal_del();
     }
     if (code == 0x38) {
@@ -50,6 +66,12 @@ static void process_key(uint8_t code)
     }
     if (code == 0xB8) {
         lalt_state = 0;
+    }
+    if (code == 0xE0 && inb(0x60) == 0x48)  {
+        scroll_up();
+    }
+     if (code == 0xE0 && inb(0x60) == 0x50)  {
+        scroll_down();
     }
     if (lalt_state && code == 0x0F) {
         struct s_terminal t;

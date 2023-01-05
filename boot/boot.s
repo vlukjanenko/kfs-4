@@ -6,7 +6,7 @@
 #    By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/01 19:07:23 by majosue           #+#    #+#              #
-#    Updated: 2022/11/29 14:55:35 by majosue          ###   ########.fr        #
+#    Updated: 2022/12/22 09:26:54 by majosue          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,8 @@ section .bss
 	global regholder:data
 	regholder:
 		resb 4
+	stackholder:
+		resb 8
 
 section .text
 
@@ -38,6 +40,11 @@ _start:
 	mov [regholder], ebx
 	extern main
 	mov esp, stack_top
+	push 0xBA0BAB
+	push 0xBABE
+	push 0xBE
+	push 0xACE
+
 	call main
 	cli
 .hang: hlt
@@ -58,3 +65,12 @@ complete_flush:
     mov gs, dx
     mov ss, dx
     ret
+	
+global get_stack:function
+get_stack:
+	mov [stackholder], DWORD stack_top - 4
+	mov [stackholder + 4], DWORD esp
+	mov eax, stackholder
+
+	ret
+

@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 18:58:15 by majosue           #+#    #+#             */
-/*   Updated: 2022/11/04 16:53:35 by majosue          ###   ########.fr       */
+/*   Updated: 2022/12/21 17:27:47 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,18 @@
 # include "stddef.h"
 # include "stdint.h"
 
+struct s_stack {
+    uint32_t *top;
+    uint32_t *bottom;
+};
+
 size_t	strlen(const char* str);
 void	*memcpy(void *dst, const void *src, size_t n);
 void	*memmove(void *dst, const void *src, size_t len);
 uint8_t	inb(uint16_t port);
 void	outb(uint16_t port, uint8_t value);
+struct s_stack *get_stack(void);
+void    print_stack(void);
 int		isalpha(int c);
 int		isprint(int c);
 void	bzero(void *s, size_t n);

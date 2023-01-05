@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 19:03:14 by majosue           #+#    #+#             */
-/*   Updated: 2022/11/01 19:05:35 by majosue          ###   ########.fr       */
+/*   Updated: 2023/01/05 19:40:00 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,15 @@ static size_t       terminal_row;
 static size_t       terminal_column;
 static uint8_t      terminal_color;
 static uint16_t*    terminal_buffer;
+static char			terminal_input_buffer[SCREEN_SIZE];
+static size_t		terminal_i_b_pos;
+
+// for scroll (save last 3 screen)
+static uint16_t		terminal_whole_buffer[SCREEN_SIZE * BUFF_SIZE];
+static uint16_t		*screen_top_line = &terminal_whole_buffer[SCREEN_SIZE * (BUFF_SIZE - 1)]; // просто дублирующий указатель для верха экрана в хол буфер
+static uint16_t		*current_top_line = &terminal_whole_buffer[SCREEN_SIZE * (BUFF_SIZE - 1)]; // вот это будет для текущего верха (когда вверх вниз листаем)
+static uint16_t		*buffer_top = &terminal_whole_buffer[SCREEN_SIZE * (BUFF_SIZE - 1)]; // а это будет следить за текущим верхом заполненным
+//
 
 void disable_cursor()
 {
@@ -46,6 +55,36 @@ void enable_cursor(uint8_t cursor_start, uint8_t cursor_end)
 }
 
 
+void scroll_up()
+{
+	if (current_top_line > buffer_top) {
+		disable_cursor();
+		current_top_line -= VGA_WIDTH;
+		memmove(terminal_buffer, current_top_line, SCREEN_SIZE_BYTES);
+	}
+
+}
+
+void scroll_down()
+{
+	if (current_top_line < screen_top_line) {
+		current_top_line += VGA_WIDTH;
+		memmove(terminal_buffer, current_top_line, SCREEN_SIZE_BYTES);
+		if (current_top_line == screen_top_line) {
+			enable_cursor(0, 15);
+		}
+	}
+}
+
+void reset_scroll()
+{
+	if (current_top_line < screen_top_line) {
+		current_top_line = screen_top_line;
+		memmove(terminal_buffer, current_top_line, SCREEN_SIZE_BYTES);
+		enable_cursor(0, 15);
+	}
+}
+
 static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg)
 {
 	return fg | bg << 4;
@@ -61,11 +100,13 @@ void terminal_initialize(enum vga_color fg, enum vga_color bg)
 	terminal_row = 0;
 	terminal_column = 0;
 	terminal_color = vga_entry_color(fg, bg);
+	terminal_i_b_pos = 0;
 	terminal_buffer = (uint16_t*) 0xB8000;
 	for (size_t y = 0; y < VGA_HEIGHT; y++) {
 		for (size_t x = 0; x < VGA_WIDTH; x++) {
 			const size_t index = y * VGA_WIDTH + x;
 			terminal_buffer[index] = vga_entry(' ', terminal_color);
+			screen_top_line[index] =  vga_entry(' ', terminal_color);
 		}
 	}
 }
@@ -77,15 +118,22 @@ void terminal_setcolor(enum vga_color fg, enum vga_color bg)
 
 static void terminal_scroll()
 {
+	memmove(terminal_whole_buffer, 
+		terminal_whole_buffer + VGA_WIDTH, 
+			(VGA_WIDTH * VGA_HEIGHT * BUFF_SIZE * sizeof(uint16_t)) - 
+					(VGA_WIDTH * sizeof(uint16_t)));
+	
+	buffer_top = buffer_top == terminal_whole_buffer ? buffer_top : buffer_top - VGA_WIDTH;
 	for (size_t y = 0; y < VGA_HEIGHT - 1; y++) {
 		for (size_t x = 0; x < VGA_WIDTH; x++) {
 			const size_t index = y * VGA_WIDTH + x;
 			terminal_buffer[index] = terminal_buffer[index + VGA_WIDTH];
 		}
 	}
-	for (size_t x = 0; x < VGA_WIDTH; x++) {
+	for (size_t x = 0; x < VGA_WIDTH; x++) {	// wipe last line;
 		const size_t index = (VGA_HEIGHT - 1) * VGA_WIDTH + x;
 		terminal_buffer[index] = vga_entry(' ', terminal_color);
+		screen_top_line[index] = vga_entry(' ', terminal_color);
 	}
 	terminal_column = 0;
 }
@@ -104,7 +152,9 @@ static void terminal_putentryat(char c, uint8_t color, \
 								size_t x, size_t y)
 {
 	const size_t index = y * VGA_WIDTH + x;
+
 	terminal_buffer[index] = vga_entry(c, color);
+	screen_top_line[index] = terminal_buffer[index];
 }
  
 void terminal_putchar(char c) 
@@ -125,6 +175,27 @@ void terminal_putchar(char c)
 	}
 	update_cursor(terminal_column, terminal_row);
 }
+
+void terminal_putchar_to_buffer(char c)
+{
+	if (terminal_i_b_pos == VGA_WIDTH * VGA_HEIGHT - 1) { // need last byte for null-terminator;
+		terminal_writestring("Error: input buffer overflow\n");
+		return;
+	}
+	terminal_input_buffer[terminal_i_b_pos++] = c;
+	terminal_putchar(c);
+}
+
+char *terminal_get_input_buffer()
+{
+	terminal_input_buffer[terminal_i_b_pos] = '\0';
+	return (terminal_input_buffer);
+}
+
+void terminal_reset_input_buffer() {
+	terminal_i_b_pos = 0;
+}
+
  
 void terminal_write(const char* data, size_t size) 
 {
@@ -139,11 +210,14 @@ void terminal_writestring(const char* data)
 
 void terminal_del(void) {
 	int pos = terminal_row * VGA_WIDTH + terminal_column;
-	if (pos > 0) {
+
+	if (pos > 0 && terminal_i_b_pos > 0) {
 		pos--;
+		terminal_i_b_pos--;
 		terminal_row = pos / VGA_WIDTH;
 		terminal_column = pos % VGA_WIDTH;
 		terminal_buffer[pos] = vga_entry(' ', terminal_color);
+		screen_top_line[pos] = vga_entry(' ', terminal_color);
 		update_cursor(terminal_column, terminal_row);
 	}
 }
