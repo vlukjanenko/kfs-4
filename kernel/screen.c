@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 19:03:14 by majosue           #+#    #+#             */
-/*   Updated: 2023/01/05 19:40:00 by majosue          ###   ########.fr       */
+/*   Updated: 2023/01/11 20:57:58 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,16 @@ static uint16_t*    terminal_buffer;
 static char			terminal_input_buffer[SCREEN_SIZE];
 static size_t		terminal_i_b_pos;
 
-// for scroll (save last 3 screen)
-static uint16_t		terminal_whole_buffer[SCREEN_SIZE * BUFF_SIZE];
-static uint16_t		*screen_top_line = &terminal_whole_buffer[SCREEN_SIZE * (BUFF_SIZE - 1)]; // просто дублирующий указатель для верха экрана в хол буфер
-static uint16_t		*current_top_line = &terminal_whole_buffer[SCREEN_SIZE * (BUFF_SIZE - 1)]; // вот это будет для текущего верха (когда вверх вниз листаем)
-static uint16_t		*buffer_top = &terminal_whole_buffer[SCREEN_SIZE * (BUFF_SIZE - 1)]; // а это будет следить за текущим верхом заполненным
-//
+/* for scroll
+	in normal mode
+	Data printed to terminal_buffer also saved to terminal_whole_buffer
+	in scroll mode
+	we change current_top_line and copy saved data to terminal_buffer
+*/
+static uint16_t		terminal_whole_buffer[SCREEN_SIZE * BUFF_SIZE]; // here we hold screens * number
+static uint16_t		* const screen_top_line = &terminal_whole_buffer[SCREEN_SIZE * (BUFF_SIZE - 1)]; // line in buffer that correspond screen first line
+static uint16_t		*current_top_line = &terminal_whole_buffer[SCREEN_SIZE * (BUFF_SIZE - 1)]; // line in buffer that correspond screen first line
+static uint16_t		*buffer_top = &terminal_whole_buffer[SCREEN_SIZE * (BUFF_SIZE - 1)]; // hold oldest (most top) line
 
 void disable_cursor()
 {
@@ -62,7 +66,6 @@ void scroll_up()
 		current_top_line -= VGA_WIDTH;
 		memmove(terminal_buffer, current_top_line, SCREEN_SIZE_BYTES);
 	}
-
 }
 
 void scroll_down()
@@ -99,18 +102,25 @@ void terminal_initialize(enum vga_color fg, enum vga_color bg)
 {
 	terminal_row = 0;
 	terminal_column = 0;
-	terminal_color = vga_entry_color(fg, bg);
 	terminal_i_b_pos = 0;
+	terminal_setcolor(fg, bg);
 	terminal_buffer = (uint16_t*) 0xB8000;
+	buffer_top = screen_top_line;
 	for (size_t y = 0; y < VGA_HEIGHT; y++) {
 		for (size_t x = 0; x < VGA_WIDTH; x++) {
 			const size_t index = y * VGA_WIDTH + x;
 			terminal_buffer[index] = vga_entry(' ', terminal_color);
-			screen_top_line[index] =  vga_entry(' ', terminal_color);
+			screen_top_line[index] = vga_entry(' ', terminal_color);
 		}
 	}
+	update_cursor(0, 0);
 }
  
+void terminal_clear()
+{
+	terminal_initialize(terminal_color & 0xf, terminal_color >> 4);
+}
+
 void terminal_setcolor(enum vga_color fg, enum vga_color bg) 
 {
 	terminal_color = vga_entry_color(fg, bg);

@@ -1,0 +1,10 @@
+prompt +
+page scroll
+save terminal
+fill table
+commands:
+    pstack +
+    pgdb
+    clear +
+    pmmap
+    print memory
