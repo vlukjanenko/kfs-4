@@ -6,7 +6,7 @@
 #    By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/01 19:07:23 by majosue           #+#    #+#              #
-#    Updated: 2022/12/22 09:26:54 by majosue          ###   ########.fr        #
+#    Updated: 2023/01/17 12:19:10 by majosue          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,10 +40,10 @@ _start:
 	mov [regholder], ebx
 	extern main
 	mov esp, stack_top
-	push 0xBA0BAB
-	push 0xBABE
-	push 0xBE
-	push 0xACE
+	push 0xFFFFFFFF
+	push 0xAAAAAAAA
+	push 0xBBBBBBBB
+	push 0xCCCCCCCC
 
 	call main
 	cli

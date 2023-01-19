@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 18:58:15 by majosue           #+#    #+#             */
-/*   Updated: 2022/12/21 17:27:47 by majosue          ###   ########.fr       */
+/*   Updated: 2023/01/19 16:12:09 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,7 @@ void    sitoa_base(long long int value, int base, char *buffer);
 void	sitoa_base_u(unsigned long long int value, int base, char *buffer);
 int     strequ(char const *s1, char const *s2);
 int	    tolower(int c);
+void    print_memory(void *ptr, size_t size);
+void    m_dump(const char *params);
 
 #endif

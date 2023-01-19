@@ -6,7 +6,7 @@
 #    By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/12 21:25:37 by majosue           #+#    #+#              #
-#    Updated: 2022/11/10 05:23:59 by majosue          ###   ########.fr        #
+#    Updated: 2023/01/19 16:12:27 by majosue          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ CC = i686-elf-gcc
 CFLAGS = -std=gnu99 -ffreestanding -Wall -Wextra -Werror -fno-builtin \
 -fno-exceptions -fno-stack-protector -nostdlib -nodefaultlibs -MMD -g3
 SRC = boot/boot.s kernel/kernel.c  lib/baselib.c kernel/screen.c kernel/GDT.c \
-lib/ports.s kernel/keyboard.c lib/printf.c
+lib/ports.s kernel/keyboard.c lib/printf.c lib/print_memory.c lib/m_dump.c
 OBJECTS := $(SRC:%.c=%.o)
 OBJECTS := $(OBJECTS:%.s=%.o)
 DPS := $(OBJECTS:%.o=%.d)
