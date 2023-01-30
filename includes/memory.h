@@ -1,29 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   GDT.h                                              :+:      :+:    :+:   */
+/*   memory.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/01 18:58:31 by majosue           #+#    #+#             */
-/*   Updated: 2023/01/26 23:09:47 by majosue          ###   ########.fr       */
+/*   Created: 2023/01/29 20:57:49 by majosue           #+#    #+#             */
+/*   Updated: 2023/01/29 21:00:15 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GDT_H
-# define GDT_H
+#ifndef MEMORY_H
+# define MEMORY_H
 
-# include "stdint.h"
-
-struct __attribute__((packed)) GDTR
-{
-	uint16_t limit;
-	uint32_t base;
-};
-
-extern uint64_t		g_table[6];
-extern struct GDTR	gdtr;
-
-void	init_gdt();
+extern void* max_addr;
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 16:08:53 by majosue           #+#    #+#             */
-/*   Updated: 2023/01/19 16:11:12 by majosue          ###   ########.fr       */
+/*   Updated: 2023/01/19 16:17:54 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static const char *skip_word(const char *str)
 	return (str);
 }
 
-int words_nbr(const char *params)
+static int words_nbr(const char *params)
 {
 	int nbr = 0;
 

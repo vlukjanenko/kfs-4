@@ -6,21 +6,22 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 19:00:40 by majosue           #+#    #+#             */
-/*   Updated: 2022/11/22 20:18:09 by majosue          ###   ########.fr       */
+/*   Updated: 2023/01/29 21:25:18 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "GDT.h"
 
-uint64_t g_table[5] __attribute__ ((section (".gdt"))) __attribute__ ((__used__))  = {
+uint64_t g_table[6] __attribute__ ((section (".gdt"))) __attribute__ ((__used__))  = {
 	0x0000000000000000,
 	0x00CF9A000000FFFF,
 	0x00CF92000000FFFF,
+	0x00C0960000000100,
 	0x00CFFA000000FFFF,
 	0x00CFF2000000FFFF
 };
 
 struct GDTR gdtr = {
-	0x5 * 8 - 1, // тут косяк был // выходит что лимит это адрес последнего байта в заданом размере?
+	0x6 * 8 - 1,
 	(uint32_t)g_table
 };

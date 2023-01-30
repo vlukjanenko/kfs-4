@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 18:58:15 by majosue           #+#    #+#             */
-/*   Updated: 2023/01/19 16:12:09 by majosue          ###   ########.fr       */
+/*   Updated: 2023/01/29 10:19:49 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "stddef.h"
 # include "stdint.h"
+# include "multiboot.h"
 
 struct s_stack {
     uint32_t *top;
@@ -44,5 +45,6 @@ int     strequ(char const *s1, char const *s2);
 int	    tolower(int c);
 void    print_memory(void *ptr, size_t size);
 void    m_dump(const char *params);
+int     get_memory_map(struct multiboot_info *mbd, uint32_t magic);
 
 #endif

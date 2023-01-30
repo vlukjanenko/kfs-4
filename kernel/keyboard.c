@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 19:01:32 by majosue           #+#    #+#             */
-/*   Updated: 2023/01/19 16:11:18 by majosue          ###   ########.fr       */
+/*   Updated: 2023/01/29 20:53:23 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void process(const char* buffer)
 	disable_cursor();
 	if (strequ("pstack", buffer)) {
 		printf("\n");
-		print_stack();
+		/* print_stack(); */
 	} else if (strequ("help", buffer)) {
 		printf("\nuse Up Arrow and Down Arrow for scroll\navailable commands:\nclear\npstack\n");
 	} else if (strequ("", buffer)) {

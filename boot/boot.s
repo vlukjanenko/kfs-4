@@ -6,7 +6,7 @@
 #    By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/01 19:07:23 by majosue           #+#    #+#              #
-#    Updated: 2023/01/17 12:19:10 by majosue          ###   ########.fr        #
+#    Updated: 2023/01/29 21:43:55 by majosue          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,53 +24,62 @@ section .multiboot
 
 section .bss
 	align 16
-	stack_bottom:
-	resb 16384
+	global max_addr:data
+	max_addr:
+	resb 4
+	resb 16384					;; temp stack
 	stack_top:
-	global regholder:data
-	regholder:
-		resb 4
-	stackholder:
-		resb 8
-
+	
 section .text
 
 global _start:function (_start.end - _start)
 _start:
-	mov [regholder], ebx
+	mov esp, stack_top			
+	push eax					;; save magic number multiboot
+	push ebx					;; save address of struct multiboot_info
+	push 0
+	push 15
+	extern terminal_initialize
+	call terminal_initialize
+	add esp, 8
+	extern get_memory_map		
+	call get_memory_map											
+	cmp eax, 0
+	jnz .hang
+	call load_segment_registers;
+	mov esp, [max_addr]
+	push 0x6b636174  
+	push 0x7320666f   
+	push 0x20706f74
 	extern main
-	mov esp, stack_top
-	push 0xFFFFFFFF
-	push 0xAAAAAAAA
-	push 0xBBBBBBBB
-	push 0xCCCCCCCC
-
 	call main
 	cli
 .hang: hlt
 	jmp .hang
 .end:
 
-test:
+load_segment_registers:
 	extern gdtr
 	lgdt [gdtr]
-	jmp 0x08:complete_flush	
+	jmp 0x08:complete_flush
 	ret
 
 complete_flush:
-    mov dx, 0x10
-    mov ds, dx
+    mov dx, 0x10				;; data segment descriptor
+    mov ds, dx	
     mov es, dx
     mov fs, dx
     mov gs, dx
+	mov dx, 0x18				;; stack segment descriptor
     mov ss, dx
-    ret
-	
-global get_stack:function
-get_stack:
-	mov [stackholder], DWORD stack_top - 4
-	mov [stackholder + 4], DWORD esp
-	mov eax, stackholder
-
 	ret
+	
+;global get_stack:function
+;get_stack:
+	;mov [stackholder], DWORD stack_top - 4
+	;mov [stackholder], DWORD 0xffff00
+	;mov [stackholder + 4], DWORD esp
+	;mov eax, stackholder
+
+	;ret		
 
