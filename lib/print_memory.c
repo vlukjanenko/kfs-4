@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 16:03:49 by majosue           #+#    #+#             */
-/*   Updated: 2023/01/31 15:27:06 by majosue          ###   ########.fr       */
+/*   Updated: 2023/01/31 17:17:03 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ static void print_values(void *ptr, void *end, size_t group, size_t groups)
 			}
 		}
 	}
-
 }
 
 static void print_chars(void *ptr, void *end, size_t group, size_t groups)
@@ -57,7 +56,8 @@ void print_memory(void *ptr, size_t size)
 	size_t	group = 1;		// bytes in group
 	size_t	h = 1;
 	
-	for (; ptr < end; ptr += group * groups)
+	for (; ptr < end; ptr += (size_t)(end - ptr) < group * groups ? \
+								(size_t)(end - ptr) : group * groups)
 	{
 		print_values(ptr, end, group, groups);
 		print_chars(ptr, end, group, groups);
