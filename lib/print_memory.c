@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 16:03:49 by majosue           #+#    #+#             */
-/*   Updated: 2023/01/31 17:17:03 by majosue          ###   ########.fr       */
+/*   Updated: 2023/01/31 20:58:15 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void print_memory(void *ptr, size_t size)
 	void	*end = ptr + size;
 	size_t 	groups = 16;	
 	size_t	group = 1;		// bytes in group
-	size_t	h = 1;
+	size_t	h = 1;			// screen height
 	
 	for (; ptr < end; ptr += (size_t)(end - ptr) < group * groups ? \
 								(size_t)(end - ptr) : group * groups)
