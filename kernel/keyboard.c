@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 19:01:32 by majosue           #+#    #+#             */
-/*   Updated: 2023/01/29 20:53:23 by majosue          ###   ########.fr       */
+/*   Updated: 2023/01/31 13:39:25 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,24 @@ static void process(const char* buffer)
 	disable_cursor();
 	if (strequ("pstack", buffer)) {
 		printf("\n");
-		/* print_stack(); */
+		print_stack();
 	} else if (strequ("help", buffer)) {
-		printf("\nuse Up Arrow and Down Arrow for scroll\navailable commands:\nclear\npstack\n");
+		printf("\nuse Up Arrow and Down Arrow for scroll\n"
+		"available commands:\nclear\npstack\n"
+		"halt\nreboot\npoweroff\nmdump\n");
 	} else if (strequ("", buffer)) {
 		printf("\n");
 	} else if (strequ("clear", buffer)) {
 		terminal_clear();
 	} else if (strnequ("mdump", buffer, 5)) {
 		m_dump(buffer + 5);
+	} else if (strequ("poweroff", buffer)) {
+		outw(0x604, 0x2000);
+	} else if (strequ("reboot", buffer)) {
+		outb(0x64, 0xFE);
+	} else if (strequ("halt", buffer)) {
+		printf("\nSystem halted");
+		asm volatile ("hlt");
 	} else {
 		printf("\ncommand not found: %s\ntype help for available commands\n", buffer);
 	}

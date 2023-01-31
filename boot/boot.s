@@ -6,7 +6,7 @@
 #    By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/01 19:07:23 by majosue           #+#    #+#              #
-#    Updated: 2023/01/29 21:43:55 by majosue          ###   ########.fr        #
+#    Updated: 2023/01/30 16:12:01 by majosue          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -73,13 +73,4 @@ complete_flush:
 	mov dx, 0x18				;; stack segment descriptor
     mov ss, dx
 	ret
-	
-;global get_stack:function
-;get_stack:
-	;mov [stackholder], DWORD stack_top - 4
-	;mov [stackholder], DWORD 0xffff00
-	;mov [stackholder + 4], DWORD esp
-	;mov eax, stackholder
-
-	;ret		
 

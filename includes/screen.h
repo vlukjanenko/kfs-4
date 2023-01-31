@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 18:57:16 by majosue           #+#    #+#             */
-/*   Updated: 2023/01/11 20:58:31 by majosue          ###   ########.fr       */
+/*   Updated: 2023/01/30 16:32:21 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # define VGA_HEIGHT	25
 # define SCREEN_SIZE VGA_WIDTH * VGA_HEIGHT
 # define SCREEN_SIZE_BYTES SCREEN_SIZE * sizeof(uint16_t)
-# define BUFF_SIZE 100
+# define BUFF_SIZE 5
 
 struct s_terminal {
 	size_t		row;

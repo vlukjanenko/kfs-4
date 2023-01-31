@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 19:03:14 by majosue           #+#    #+#             */
-/*   Updated: 2023/01/11 20:57:58 by majosue          ###   ########.fr       */
+/*   Updated: 2023/01/31 14:46:06 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static size_t		terminal_i_b_pos;
 */
 static uint16_t		terminal_whole_buffer[SCREEN_SIZE * BUFF_SIZE]; // here we hold screens * number
 static uint16_t		* const screen_top_line = &terminal_whole_buffer[SCREEN_SIZE * (BUFF_SIZE - 1)]; // line in buffer that correspond screen first line
-static uint16_t		*current_top_line = &terminal_whole_buffer[SCREEN_SIZE * (BUFF_SIZE - 1)]; // line in buffer that correspond screen first line
+static uint16_t		*current_top_line = &terminal_whole_buffer[SCREEN_SIZE * (BUFF_SIZE - 1)];		// line in buffer that correspond screen first line
 static uint16_t		*buffer_top = &terminal_whole_buffer[SCREEN_SIZE * (BUFF_SIZE - 1)]; // hold oldest (most top) line
 
 void disable_cursor()
@@ -132,14 +132,18 @@ static void terminal_scroll()
 		terminal_whole_buffer + VGA_WIDTH, 
 			(VGA_WIDTH * VGA_HEIGHT * BUFF_SIZE * sizeof(uint16_t)) - 
 					(VGA_WIDTH * sizeof(uint16_t)));
-	
 	buffer_top = buffer_top == terminal_whole_buffer ? buffer_top : buffer_top - VGA_WIDTH;
-	for (size_t y = 0; y < VGA_HEIGHT - 1; y++) {
+
+	/* for (size_t y = 0; y < VGA_HEIGHT - 1; y++) {
 		for (size_t x = 0; x < VGA_WIDTH; x++) {
 			const size_t index = y * VGA_WIDTH + x;
 			terminal_buffer[index] = terminal_buffer[index + VGA_WIDTH];
 		}
-	}
+	} */
+
+	memmove (terminal_buffer, terminal_buffer + VGA_WIDTH, (VGA_WIDTH * VGA_HEIGHT * sizeof(uint16_t)) - 
+					(VGA_WIDTH * sizeof(uint16_t)));
+
 	for (size_t x = 0; x < VGA_WIDTH; x++) {	// wipe last line;
 		const size_t index = (VGA_HEIGHT - 1) * VGA_WIDTH + x;
 		terminal_buffer[index] = vga_entry(' ', terminal_color);
