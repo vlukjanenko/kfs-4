@@ -6,13 +6,13 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 20:57:49 by majosue           #+#    #+#             */
-/*   Updated: 2023/01/29 21:00:15 by majosue          ###   ########.fr       */
+/*   Updated: 2023/02/01 11:00:37 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MEMORY_H
 # define MEMORY_H
 
-extern void* max_addr;
+extern void*    max_addr;
 
 #endif

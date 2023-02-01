@@ -6,13 +6,13 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 18:59:15 by majosue           #+#    #+#             */
-/*   Updated: 2022/11/01 18:59:19 by majosue          ###   ########.fr       */
+/*   Updated: 2023/02/01 11:00:29 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef KEYBOARD_H
 # define KEYBOARD_H
 
-void    poll_keyboard(void *val);
+void	poll_keyboard(void *val);
 
 #endif

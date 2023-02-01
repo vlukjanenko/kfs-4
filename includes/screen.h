@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 18:57:16 by majosue           #+#    #+#             */
-/*   Updated: 2023/01/30 16:32:21 by majosue          ###   ########.fr       */
+/*   Updated: 2023/02/01 11:02:16 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ enum vga_color {
 	VGA_COLOR_WHITE
 };
 
-void    terminal_initialize(enum vga_color fg, enum vga_color bg);
+void	terminal_initialize(enum vga_color fg, enum vga_color bg);
 void	terminal_clear(void);
 void    terminal_setcolor(enum vga_color fg, enum vga_color bg);
 void    terminal_putchar(char c);

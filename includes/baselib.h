@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 18:58:15 by majosue           #+#    #+#             */
-/*   Updated: 2023/01/30 16:01:50 by majosue          ###   ########.fr       */
+/*   Updated: 2023/01/31 21:13:25 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,6 @@
 # include "stddef.h"
 # include "stdint.h"
 # include "multiboot.h"
-
-struct s_stack {
-    uint32_t *top;
-    uint32_t *bottom;
-};
 
 size_t	strlen(const char* str);
 void	*memcpy(void *dst, const void *src, size_t n);

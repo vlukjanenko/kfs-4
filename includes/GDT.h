@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 18:58:31 by majosue           #+#    #+#             */
-/*   Updated: 2023/01/30 13:42:24 by majosue          ###   ########.fr       */
+/*   Updated: 2023/01/31 21:05:18 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,5 @@ struct __attribute__((packed)) GDTR
 
 extern uint64_t		g_table[7];
 extern struct GDTR	gdtr;
-
-void	init_gdt();
 
 #endif
