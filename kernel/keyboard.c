@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 19:01:32 by majosue           #+#    #+#             */
-/*   Updated: 2023/01/31 13:39:25 by majosue          ###   ########.fr       */
+/*   Updated: 2023/02/02 07:56:06 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,10 @@ static void process_key(uint8_t code, int *welcome)
 	if (code == 0xE0 && inb(0x60) == 0x48)  {
 		scroll_up();
 	}
-	 if (code == 0xE0 && inb(0x60) == 0x50)  {
+	if (code == 0xE0 && inb(0x60) == 0x50)  {
 		scroll_down();
 	}
-	if (lalt_state && code == 0x0F) {
+	/* if (lalt_state && code == 0x0F) {
 		struct s_terminal t;
 		t.color = second_terminal->color;
 		t.column = second_terminal->column;
@@ -101,7 +101,7 @@ static void process_key(uint8_t code, int *welcome)
 		sizeof(uint16_t) * VGA_HEIGHT * VGA_WIDTH);
 		terminal_save(second_terminal);
 		terminal_restore(&t);
-	}
+	} */
 }
 
 void poll_keyboard(void* val)
