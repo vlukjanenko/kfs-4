@@ -6,7 +6,7 @@
 #    By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/01 19:07:23 by majosue           #+#    #+#              #
-#    Updated: 2023/01/30 16:12:01 by majosue          ###   ########.fr        #
+#    Updated: 2023/03/01 11:06:51 by majosue          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,11 +24,12 @@ section .multiboot
 
 section .bss
 	align 16
+	resb 16384					;; temp stack
+	global stack_top:data
+	stack_top:
 	global max_addr:data
 	max_addr:
 	resb 4
-	resb 16384					;; temp stack
-	stack_top:
 	
 section .text
 
@@ -46,8 +47,11 @@ _start:
 	call get_memory_map											
 	cmp eax, 0
 	jnz .hang
-	call load_segment_registers;
-	mov esp, [max_addr]
+	call load_segment_registers
+	extern idt_init
+	call idt_init
+	;mov esp, [max_addr]
+	mov esp, stack_top			;; cleanup stack for demo
 	push 0x6b636174  
 	push 0x7320666f   
 	push 0x20706f74

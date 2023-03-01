@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 16:03:49 by majosue           #+#    #+#             */
-/*   Updated: 2023/01/31 20:58:15 by majosue          ###   ########.fr       */
+/*   Updated: 2023/02/28 14:54:27 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void print_values(void *ptr, void *end, size_t group, size_t groups)
 {
 	if (ptr == end)
 		return;
-	printf("%08p:", ptr);
+	printf("%010p:", ptr);
 	for (size_t i = 0; i < groups; i++) {
 		printf(" ");
 		for (size_t j = 0; j < group; j++) {

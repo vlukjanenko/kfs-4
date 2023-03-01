@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 20:11:35 by majosue           #+#    #+#             */
-/*   Updated: 2023/02/01 13:46:08 by majosue          ###   ########.fr       */
+/*   Updated: 2023/02/05 18:28:01 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "multiboot.h"
 #include "memory.h"
 
-int get_memory_map(struct multiboot_info *mbd, uint32_t magic)
+int	get_memory_map(struct multiboot_info *mbd, uint32_t magic)
 {
 	/* Make sure the magic number matches for memory mapping*/
 	if(magic != MULTIBOOT_BOOTLOADER_MAGIC) {

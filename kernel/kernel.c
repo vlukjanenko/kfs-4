@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 19:00:59 by majosue           #+#    #+#             */
-/*   Updated: 2023/02/01 11:22:38 by majosue          ###   ########.fr       */
+/*   Updated: 2023/02/28 14:53:25 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,11 @@
 #include "keyboard.h"
 #include "multiboot.h"
 #include "memory.h"
+#include "IDT.h"
 
 void	print_stack(void)
 {
-	void* top = max_addr;
+	void* top = &stack_top;
 	void* bottom;
 	char stack_indicator1[8] = {'b','o', 't', 't', 'o', 'm' , '.', '.'};
 	(void)stack_indicator1;
@@ -104,8 +105,8 @@ int	main(void)
 	terminal_setcolor(VGA_COLOR_WHITE, VGA_COLOR_BLACK);
 	printf("                              ###   ########.fr\n");
 	print_stack();
-	print_gdt();
-	enable_cursor(0, 15);	
+	//print_gdt();
+	enable_cursor(0, 15);
 	poll_keyboard(NULL);
 	return (0);
 }
