@@ -6,7 +6,7 @@
 #    By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/01 19:07:23 by majosue           #+#    #+#              #
-#    Updated: 2023/03/01 11:06:51 by majosue          ###   ########.fr        #
+#    Updated: 2023/03/01 12:19:50 by majosue          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,14 +44,14 @@ _start:
 	call terminal_initialize
 	add esp, 8
 	extern get_memory_map		
-	call get_memory_map											
+	call get_memory_map
+	add esp, 8											
 	cmp eax, 0
 	jnz .hang
 	call load_segment_registers
 	extern idt_init
 	call idt_init
 	;mov esp, [max_addr]
-	mov esp, stack_top			;; cleanup stack for demo
 	push 0x6b636174  
 	push 0x7320666f   
 	push 0x20706f74
