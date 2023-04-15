@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 19:00:59 by majosue           #+#    #+#             */
-/*   Updated: 2023/04/14 16:49:54 by majosue          ###   ########.fr       */
+/*   Updated: 2023/04/15 11:59:14 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	print_gdt()
 int	main(void) 
 {
 	terminal_initialize(VGA_COLOR_WHITE, VGA_COLOR_BLACK); 
-	disable_cursor();
+/* 	disable_cursor();
 	terminal_setcolor(VGA_COLOR_RED, VGA_COLOR_BLACK);
 	printf("                                  :::      ::::::::\n");
 	terminal_setcolor(VGA_COLOR_GREEN, VGA_COLOR_BLACK);
@@ -103,7 +103,7 @@ int	main(void)
 	terminal_setcolor(VGA_COLOR_LIGHT_BLUE, VGA_COLOR_BLACK);
 	printf("                               #+#    #+#\n");
 	terminal_setcolor(VGA_COLOR_WHITE, VGA_COLOR_BLACK);
-	printf("                              ###   ########.fr\n");
+	printf("                              ###   ########.fr\n"); */
 	//print_stack();
 	//print_gdt();
 	/* 
@@ -117,27 +117,7 @@ int	main(void)
 	free_frame(tmp);
 	printf("frame addr = %p\n", get_frame()); 
 	*/
-	uint32_t *page_directory = (uint32_t *)get_frame();
-	for(int i = 0; i < 1024; i++) {
-		// This sets the following flags to the pages:
-		//   Supervisor: Only kernel-mode can access them
-		//   Write Enabled: It can be both read from and written to
-		//   Not Present: The page table is not present
-		page_directory[i] = 0x00000002;
-	}
-	page_directory[1023] = (uint32_t)page_directory | 3; // to self
-	printf("page dir address %x\n", (uint32_t)page_directory);
-	uint32_t *first_page_table = (uint32_t *)get_frame();
-	for(int i = 0; i < 1024; i++)
-	{
-		// As the address is page aligned, it will always leave 12 bits zeroed.
-		// Those bits are used by the attributes ;)
-		first_page_table[i] = (i * 0x1000) | 3; // attributes: supervisor level, read/write, present.
-	}
-	page_directory[0] = (uint32_t)first_page_table | 3;
-	load_page_directory(page_directory);
-	enable_paging();
-
+	turn_on_paging();
 	enable_cursor(0, 15);
 	poll_keyboard(NULL);
 	return (0);
