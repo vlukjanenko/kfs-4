@@ -44,14 +44,9 @@ void turn_on_paging()
 
 	for(int i = 0; i < 1024; i++)
 	{
-		
-		// падает если ограничить заполнение помечеными фреймами
-		// почему? что то там используется, но что?
-   /*  
-		if (frame_status(i * 0x1000))
-		break; 
-	*/
 
+		if (!frame_status(i * 0x1000))
+			break;
 
 		 // As the address is page aligned, it will always leave 12 bits zeroed.
 		// Those bits are used by the attributes ;)

@@ -26,10 +26,11 @@ static void frame_allocator_init(unsigned char **arr, uint32_t *size)
 	*size = max_addr / 0x1000 / 8;
 	frames_in_use = (uint32_t)&end_of_code / 0x1000 + *size / 0x1000;
 
+	printf("Symbol after . = 1M %p\n", &_ptr);
 	printf("End of code %#x (%u frames)\n", &end_of_code, (uint32_t)(&end_of_code) / 0x1000);
 	printf("Bitmask array size: %u (%u frames)\n", *size, *size / 0x1000);
 	printf("Frames in use: %u frames\n", frames_in_use);
-	
+
 	*arr = &end_of_code;
 	bzero(*arr, *size);
 
@@ -50,7 +51,7 @@ int frame_status(uint32_t addr)
 void free_frame(void* addr)
 {
 	unsigned char *arr = &end_of_code;
-	
+
 	arr[(uint32_t)addr / 0x1000 / 8] = arr[(uint32_t)addr / 0x1000 / 8] & \
 		~((arr[(uint32_t)addr / 0x1000 / 8] & \
 			(1 << (uint32_t)addr / 0x1000 % 8)));

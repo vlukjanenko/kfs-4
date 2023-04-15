@@ -2,16 +2,16 @@ ENTRY(_start)
 SECTIONS
 {
 	_gdt_start = 0x00000800;
-	. = 1M;
-
 	.gdt _gdt_start :
 	{
 		KEEP(*(.gdt))
 	}
+	. = 1M;
+	_ptr = .;
 	.text BLOCK(4K) : ALIGN(4K)
 	{
 		*(.multiboot)
-		*(.text)			
+		*(.text)
 	}
 	.rodata BLOCK(4K) : ALIGN(4K)
 	{
@@ -27,5 +27,5 @@ SECTIONS
 		*(.bss)
 	}
 	. = ALIGN(4K);
-	end_of_code = ABSOLUTE(.); /* тут конец нашего кода и дальше память свободна? */
+	end_of_code = .; /* тут конец нашего кода и дальше память свободна? */
 }
