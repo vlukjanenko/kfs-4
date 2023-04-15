@@ -11,7 +11,7 @@ SECTIONS
 	.text BLOCK(4K) : ALIGN(4K)
 	{
 		*(.multiboot)
-		*(.text)	
+		*(.text)			
 	}
 	.rodata BLOCK(4K) : ALIGN(4K)
 	{
@@ -26,4 +26,6 @@ SECTIONS
 		*(COMMON)
 		*(.bss)
 	}
+	. = ALIGN(4K);
+	end_of_code = ABSOLUTE(.); /* тут конец нашего кода и дальше память свободна? */
 }

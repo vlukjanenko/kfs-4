@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 20:11:35 by majosue           #+#    #+#             */
-/*   Updated: 2023/02/05 18:28:01 by majosue          ###   ########.fr       */
+/*   Updated: 2023/04/15 10:34:50 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,11 @@ int	get_memory_map(struct multiboot_info *mbd, uint32_t magic)
 			 * actively being used by the kernel! You'll need to take that
 			 * into account before writing to memory!
 			 */
-			max_addr = (void*)((uint32_t)(mmmt->addr + mmmt->len - 1) > \
+			max_addr = ((uint32_t)(mmmt->addr + mmmt->len - 1) > \
 			 	(uint32_t)max_addr ? (uint32_t)(mmmt->addr + mmmt->len - 1) : \
 				(uint32_t)max_addr);
 		}      
 	}
-	max_addr = (void *)((uint32_t)max_addr - (uint32_t)max_addr % 16);
+	// max_addr = (void *)((uint32_t)max_addr - (uint32_t)max_addr % 16);
 	return (0);
 }
