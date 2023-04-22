@@ -74,7 +74,7 @@ void	print_gdt()
 		printf("DB: %llx ", (*entry >> 52 & 0x4) >> 2);
 		printf("L: %llx\n", (*entry >> 52 & 0x2) >> 1);
 		printf("Access Byte (%llx): ",  (*entry >> 40 & 0xff));
-		printf("P: %llx DPL: %llx S: %llx E: %llx DC: %llx RW: %llx A: %llx\n", 
+		printf("P: %llx DPL: %llx S: %llx E: %llx DC: %llx RW: %llx A: %llx\n",
 		(*entry >> 40 & 0x80) >> 7,
 		(*entry >> 40 & 0x60) >> 5,
 		(*entry >> 40 & 0x10) >> 4,
@@ -86,9 +86,9 @@ void	print_gdt()
 	}
 }
 
-int	main(void) 
+int	main(void)
 {
-	terminal_initialize(VGA_COLOR_WHITE, VGA_COLOR_BLACK); 
+	terminal_initialize(VGA_COLOR_WHITE, VGA_COLOR_BLACK);
 /* 	disable_cursor();
 	terminal_setcolor(VGA_COLOR_RED, VGA_COLOR_BLACK);
 	printf("                                  :::      ::::::::\n");
@@ -106,17 +106,22 @@ int	main(void)
 	printf("                              ###   ########.fr\n"); */
 	//print_stack();
 	//print_gdt();
-	/* 
+
 	printf("Position of symbol end_of_code = %x\n", &end_of_code); // предоположительно конец кода
+
 	printf("frame addr = %p\n", get_frame());
 	printf("frame addr = %p\n", get_frame());
-	void *tmp = get_frame();
-	printf("frame addr = %p\n", tmp);
+	void *tmp1 = get_frame();
+	printf("tmp1 = %p\n", tmp1);
+	void *tmp2 = get_frame();
+	printf("tmp2 = %p\n", tmp2);
 	printf("frame addr = %p\n", get_frame());
 	printf("frame addr = %p\n", get_frame());
-	free_frame(tmp);
-	printf("frame addr = %p\n", get_frame()); 
-	*/
+	printf("frames(8) addr = %p\n", get_frames(8));
+	free_frame(tmp1);
+	free_frame(tmp2);
+	printf("frames(2) addr = %p\n", get_frames(2));
+
 	turn_on_paging();
 	enable_cursor(0, 15);
 	poll_keyboard(NULL);

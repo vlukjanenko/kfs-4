@@ -57,22 +57,62 @@ void free_frame(void* addr)
 			(1 << (uint32_t)addr / 0x1000 % 8)));
 }
 
-void *get_frame()
+static void *mark_frames_occupied(unsigned char *arr, uint32_t i, int j, uint32_t frames)
+{
+	void* ret_value = (void *)(0x1000 * (i * 8 + j));
+	uint32_t nbr = 0;
+
+	for ( ; nbr < frames; i++) {
+		for (; j < 8 && nbr < frames; j++) {
+			arr[i] = arr[i] | (1 << j);
+			nbr++;
+		}
+		j = 0;
+	}
+	return (ret_value);
+}
+
+static void *__get_frames(unsigned char *arr, uint32_t *i, int *j, uint32_t frames, uint32_t size)
+{
+	uint32_t nbr = 0;
+	uint32_t i_begin = *i;
+	uint32_t j_begin = *j;
+
+	for (; *i < size; (*i)++) {
+		for (; *j < 8; (*j)++) {
+			if (!(arr[*i] & (1 << *j)))
+				nbr++;
+			else
+				return (NULL);
+			if (nbr == frames)
+				return mark_frames_occupied(arr, i_begin, j_begin, frames);
+		}
+		*j = 0;
+	}
+	return (NULL);
+}
+
+void *get_frames(uint32_t frames)
 {
 	static uint32_t			size;
 	static unsigned char	*arr;
+	void	*ret_value = NULL;
 
 	if (!arr)
 		frame_allocator_init(&arr, &size);
-	for (uint32_t i = 0; i < size; i++) {
+	for (uint32_t i = 0; i < size && !ret_value; i++) {
 		if (arr[i] == 0xFF)
 			continue;
-		for (int j = 0; j < 8; j++) {
+		for (int j = 0; j < 8 && !ret_value; j++) {
 			if (!(arr[i] & (1 << j))) {
-				arr[i] = arr[i] | (1 << j);
-				return ((void *)(0x1000 * (i * 8 + j)));
+				ret_value = __get_frames(arr, &i, &j, frames, size);
 			}
 		}
 	}
-	return (NULL);
+	return (ret_value);
+}
+
+void *get_frame()
+{
+	return (get_frames(1));
 }

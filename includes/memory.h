@@ -21,6 +21,7 @@ extern unsigned char    end_of_code;
 extern unsigned char	_ptr;
 
 void *get_frame(void);
+void *get_frames(uint32_t frames);
 void free_frame(void* addr);
 void load_page_directory(void *page_directory);
 void enable_paging(void);
