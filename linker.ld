@@ -7,8 +7,7 @@ SECTIONS
 		KEEP(*(.gdt))
 	}
 	. = 1M;
-	_ptr = .;
-
+	start_of_code = ABSOLUTE(.);
 	.bootstrap.data ALIGN(4K) : {
 		*(.multiboot)
 		*(.bootstrap.data)

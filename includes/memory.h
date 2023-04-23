@@ -18,7 +18,7 @@
 extern uint32_t			max_addr;
 extern void*			stack_top;
 extern unsigned char	end_of_code;
-extern unsigned char	_ptr;
+extern unsigned char	start_of_code;
 
 extern uint32_t pd_first_entry;
 extern uint32_t pt_first_entry;

@@ -14,6 +14,8 @@
 #include "stdint.h"
 #include "baselib.h"
 #include "stddef.h"
+#define MAX_ADDR *(uint32_t *)((void *)&max_addr + 0xC0000000)
+//#define MAX_ADDR 0xffdffff 
 
 /*
 	Bit mask page frame allocator
@@ -22,11 +24,13 @@
 static void frame_allocator_init(unsigned char **arr, uint32_t *size)
 {
 	uint32_t    frames_in_use;
-	// find size of array for bitmask
-	*size = max_addr / 0x1000 / 8;
-	frames_in_use = (uint32_t)&end_of_code / 0x1000 + *size / 0x1000;
 
-	printf("Symbol after . = 1M %p\n", &_ptr);
+	// find size of array for bitmask
+	printf("max_addr = %x\n", MAX_ADDR);
+	*size = MAX_ADDR / 0x1000 / 8;
+	frames_in_use = ((uint32_t)&end_of_code - 0xC0000000) / 0x1000 + *size / 0x1000;
+
+	printf("Start of code %#x\n", &start_of_code);
 	printf("End of code %#x (%u frames)\n", &end_of_code, (uint32_t)(&end_of_code) / 0x1000);
 	printf("Bitmask array size: %u (%u frames)\n", *size, *size / 0x1000);
 	printf("Frames in use: %u frames\n", frames_in_use);

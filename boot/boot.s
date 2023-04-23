@@ -63,7 +63,7 @@ _start:
 	extern turn_on_paging
 	call turn_on_paging
 	;; правим стек
-	add esp, 0xC0000000
+	mov esp, 0xC0000000 + stack_top
 	;; не забываем про адрес вга буфера
 	jmp pre_start
 
@@ -89,6 +89,11 @@ section .bss
 section .text
 pre_start:	;; тут пойдет после включение пейджинга
 	;; удаляем из таблицы замапленную нулевую
+	mov [pd_first_entry], DWORD 0
+	mov ecx, cr3
+	mov cr3, ecx
+	extern idt_init
+	call idt_init
 	push 0
 	push 15
 	extern terminal_initialize

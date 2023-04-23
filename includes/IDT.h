@@ -15,7 +15,7 @@
 
 # include "stdint.h"
 
-#define IDTBASE	0x00000000
+#define IDTBASE	0xC0000000
 #define IDTSIZE	0xFF
 
 typedef struct {
