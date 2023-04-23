@@ -22,6 +22,6 @@ struct __attribute__((packed)) GDTR
 };
 
 extern uint64_t		g_table[7];
-extern struct GDTR	gdtr;
+extern struct GDTR	gdtr __attribute__ ((section (".bootstrap.data")));
 
 #endif

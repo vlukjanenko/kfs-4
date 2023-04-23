@@ -122,7 +122,7 @@ int	main(void)
 	free_frame(tmp2);
 	printf("frames(2) addr = %p\n", get_frames(2));
 
-	turn_on_paging();
+	//turn_on_paging(); //запускаем из ассемблера до перехода в 0xC0000000
 	enable_cursor(0, 15);
 	poll_keyboard(NULL);
 	return (0);

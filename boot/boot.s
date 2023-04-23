@@ -10,6 +10,9 @@
 #                                                                              #
 # **************************************************************************** #
 
+global pd_first_entry:data
+global pt_first_entry:data
+
 MBALIGN equ 1 << 0
 MEMINFO equ 1 << 1
 FLAGS equ MBALIGN | MEMINFO
@@ -22,7 +25,7 @@ section .multiboot
 	dd FLAGS
 	dd CHECKSUM
 
-section .bss
+section .bootstrap.bss nobits alloc noexec write align=4
 	align 16
 	resb 16384					;; temp stack
 	global stack_top:data
@@ -30,37 +33,40 @@ section .bss
 	global max_addr:data
 	max_addr:
 	resb 4
-	
-section .text
 
-global _start:function (_start.end - _start)
+section .tables nobits alloc noexec write align=4096
+pd_first_entry:
+	resb 4096
+pt_first_entry:
+	resb 4096
+
+section .boot.text progbits alloc exec nowrite align=16
+global _start:function
 _start:
-	mov esp, stack_top			
+	mov esp, stack_top
 	push eax					;; save magic number multiboot
 	push ebx					;; save address of struct multiboot_info
-	push 0
-	push 15
-	extern terminal_initialize
-	call terminal_initialize
-	add esp, 8
-	extern get_memory_map		
+	extern get_memory_map
 	call get_memory_map
-	add esp, 8											
+	add esp, 8
 	cmp eax, 0
-	jnz .hang
+	jnz pre_start.hang
 	call load_segment_registers
-	extern idt_init
-	call idt_init
+	;extern idt_init
+	;call idt_init
 	;mov esp, [max_addr]
-	push 0x6b636174  
-	push 0x7320666f   
-	push 0x20706f74
-	extern main
-	call main
-	cli
-.hang: hlt
-	jmp .hang
-.end:
+	;push 0x6b636174
+	;push 0x7320666f
+	;push 0x20706f74
+
+	;; тут включаем пейджинг
+	extern turn_on_paging
+	call turn_on_paging
+	;; правим стек
+	add esp, 0xC0000000
+	;; не забываем про адрес вга буфера
+	jmp pre_start
+
 
 load_segment_registers:
 	extern gdtr
@@ -70,11 +76,28 @@ load_segment_registers:
 
 complete_flush:
     mov dx, 0x10				;; data segment descriptor
-    mov ds, dx	
+    mov ds, dx
     mov es, dx
     mov fs, dx
     mov gs, dx
 	mov dx, 0x18				;; stack segment descriptor
     mov ss, dx
 	ret
+
+section .bss
+
+section .text
+pre_start:	;; тут пойдет после включение пейджинга
+	;; удаляем из таблицы замапленную нулевую
+	push 0
+	push 15
+	extern terminal_initialize
+	call terminal_initialize
+	add esp, 8
+	extern main
+	call main
+	cli
+.hang: hlt
+	jmp .hang
+.end:
 
