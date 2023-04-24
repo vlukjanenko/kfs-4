@@ -14,8 +14,7 @@
 #include "stdint.h"
 #include "baselib.h"
 #include "stddef.h"
-#define MAX_ADDR *(uint32_t *)((void *)&max_addr + 0xC0000000)
-//#define MAX_ADDR 0xffdffff 
+#define MAX_ADDR *(uint32_t *)((void *)&max_addr + 0xC0000000) // max_addr остался в загрузочной части
 
 /*
 	Bit mask page frame allocator
