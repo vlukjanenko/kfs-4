@@ -30,6 +30,7 @@ void load_page_directory(void *page_directory);
 void enable_paging(void);
 void turn_on_paging(void);
 int frame_status(uint32_t addr);
+void refresh_map(void);
 
 
 #endif

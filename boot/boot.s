@@ -89,9 +89,9 @@ section .bss
 section .text
 pre_start:	;; тут пойдет после включение пейджинга
 	;; удаляем из таблицы замапленную нулевую
-	mov [pd_first_entry], DWORD 0
-	mov ecx, cr3
-	mov cr3, ecx
+	;mov [pd_first_entry], DWORD 0
+	;mov ecx, cr3
+	;mov cr3, ecx
 	extern idt_init
 	call idt_init
 	push 0
@@ -106,3 +106,8 @@ pre_start:	;; тут пойдет после включение пейджинг
 	jmp .hang
 .end:
 
+global refresh_map:function
+refresh_map:
+	mov ecx, cr3
+	mov cr3, ecx
+ret

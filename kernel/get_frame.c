@@ -33,14 +33,29 @@ static void frame_allocator_init(unsigned char **arr, uint32_t *size)
 	printf("End of code %#x (%u frames)\n", &end_of_code, (uint32_t)(&end_of_code) / 0x1000);
 	printf("Bitmask array size: %u (%u frames)\n", *size, *size / 0x1000);
 	printf("Frames in use: %u frames\n", frames_in_use);
+	printf("Add pages for heap maping 256M %u frames\n", 64);
+	printf("Total frames: %u\n", frames_in_use + 64);
 
 	*arr = &end_of_code;
 	bzero(*arr, *size);
 
 	// mark used frames
-	for (uint32_t i = 0; i < frames_in_use; i++) {
+	for (uint32_t i = 0; i < frames_in_use + 64 ; i++) {
 		(*arr)[i / 8] = (*arr)[i / 8] | (1 << (i % 8));
 	}
+	// map heap
+	uint32_t *heap_tables_frames = (uint32_t *)(frames_in_use * 0x1000);
+	uint32_t heap_frame = (frames_in_use + 64) * 0x1000;
+	uint32_t *pde = (uint32_t *)0xFFFFF000;
+	for (int i = 832; i < 896; i++) {
+		pde[i] = (uint32_t)heap_tables_frames | 3;
+		for (int j = 0; j < 1024; j++) {
+			heap_tables_frames[j] = ((uint32_t*)(heap_frame))[j] | 3;
+		}
+		heap_frame += 0x400;
+		heap_tables_frames += 0x400;
+	}
+	refresh_map();
 }
 
 int frame_status(uint32_t addr)

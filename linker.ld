@@ -1,3 +1,5 @@
+/* https://wiki.osdev.org/Higher_Half_x86_Bare_Bones */
+
 ENTRY(_start)
 SECTIONS
 {
