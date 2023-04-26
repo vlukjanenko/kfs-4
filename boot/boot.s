@@ -55,18 +55,17 @@ _start:
 	;extern idt_init
 	;call idt_init
 	;mov esp, [max_addr]
-	;push 0x6b636174
-	;push 0x7320666f
-	;push 0x20706f74
+	push 0x6b636174
+	push 0x7320666f
+	push 0x20706f74
 
 	;; тут включаем пейджинг
 	extern turn_on_paging
 	call turn_on_paging
 	;; правим стек
-	mov esp, 0xC0000000 + stack_top
-	;; не забываем про адрес вга буфера
+	add esp, 0xC0000000
+	;; не забываем про адрес вга буфера в screen.c
 	jmp pre_start
-
 
 load_segment_registers:
 	extern gdtr
@@ -87,11 +86,12 @@ complete_flush:
 section .bss
 
 section .text
-pre_start:	;; тут пойдет после включение пейджинга
+pre_start:	;; тут всё после включение пейджинга
 	;; удаляем из таблицы замапленную нулевую
-	;mov [pd_first_entry], DWORD 0
-	;mov ecx, cr3
-	;mov cr3, ecx
+	mov [pd_first_entry], DWORD 0
+	mov ecx, cr3
+	mov cr3, ecx
+	call load_segment_registers_post ;; еще раз грузим GDT
 	extern idt_init
 	call idt_init
 	push 0
@@ -111,3 +111,19 @@ refresh_map:
 	mov ecx, cr3
 	mov cr3, ecx
 ret
+
+load_segment_registers_post:
+	extern gdtr_post
+	lgdt [gdtr_post]
+	jmp 0x08:complete_flush_post
+	ret
+
+complete_flush_post:
+    mov dx, 0x10
+    mov ds, dx
+    mov es, dx
+    mov fs, dx
+    mov gs, dx
+	mov dx, 0x18
+    mov ss, dx
+	ret

@@ -26,3 +26,8 @@ struct GDTR gdtr = {
 	0x7 * 8 - 1,
 	(uint32_t)g_table
 };
+
+struct GDTR gdtr_post = {
+	0x7 * 8 - 1,
+	(uint32_t)g_table + 0xC0000000 // для после включения пейджинга
+};

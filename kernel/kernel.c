@@ -20,7 +20,7 @@
 
 void	print_stack(void)
 {
-	void* top = &stack_top;
+	void* top = &stack_top + 0xc0000000;
 	void* bottom;
 	char stack_indicator1[8] = {'b','o', 't', 't', 'o', 'm' , '.', '.'};
 	(void)stack_indicator1;

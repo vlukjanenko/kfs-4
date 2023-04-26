@@ -16,7 +16,7 @@
 #include "stdint.h"
 
 extern uint32_t			max_addr;
-extern void*			stack_top;
+extern unsigned char	stack_top;
 extern unsigned char	end_of_code;
 extern unsigned char	start_of_code;
 

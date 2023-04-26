@@ -43,8 +43,10 @@ static void frame_allocator_init(unsigned char **arr, uint32_t *size)
 	for (uint32_t i = 0; i < frames_in_use + 64 ; i++) {
 		(*arr)[i / 8] = (*arr)[i / 8] | (1 << (i % 8));
 	}
+/* 	uint32_t tmp = *(uint32_t *)(0xF0000000);
+	(void)tmp; */
 	// map heap
-	uint32_t *heap_tables_frames = (uint32_t *)(frames_in_use * 0x1000);
+	/* uint32_t *heap_tables_frames = (uint32_t *)(frames_in_use * 0x1000);
 	uint32_t heap_frame = (frames_in_use + 64) * 0x1000;
 	uint32_t *pde = (uint32_t *)0xFFFFF000;
 	for (int i = 832; i < 896; i++) {
@@ -55,7 +57,7 @@ static void frame_allocator_init(unsigned char **arr, uint32_t *size)
 		heap_frame += 0x400;
 		heap_tables_frames += 0x400;
 	}
-	refresh_map();
+	refresh_map(); */
 }
 
 int frame_status(uint32_t addr)
