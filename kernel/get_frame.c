@@ -72,27 +72,41 @@ static void *__get_frames(uint32_t *i, int *j, uint32_t frames)
 	return (NULL);
 }
 
-void *get_frames(uint32_t frames)
+static void addr_to_idxs(uint32_t pfn, uint32_t *i, uint32_t *j)
+{
+	*i = pfn / 8;
+	*j = pfn % 8;
+}
+
+static uint32_t idxs_to_pfn(uint32_t i, uint32_t j)
+{
+	return (i * 8 + j);
+}
+
+void *get_frames(uint32_t start_frame, uint32_t end_frame, uint32_t frames)
 {
 	void	*ret_value = NULL;
+	uint32_t i;
+	uint32_t j;
 
 	if (!bitmask) {
 		frame_allocator_init();
 	}
 
-	for (uint32_t i = 0; i < bm_size && !ret_value; i++) {
+	for (; i < bm_size && !ret_value; i++) {
 		if (bitmask[i] == 0xFF)
 			continue;
-		for (int j = 0; j < 8 && !ret_value; j++) {
+		for (; j < 8 && !ret_value; j++) { // тут проверка чтоб не вылезли за максимальный адрес?
 			if (!(bitmask[i] & (1 << j))) {
 				ret_value = __get_frames(&i, &j, frames);
 			}
 		}
+		j = 0;
 	}
 	return (ret_value);
 }
 
-void *get_frame()
+void *get_frame(uint32_t start_frame, uint32_t end_frame)
 {
-	return (get_frames(1));
+	return (get_frames(start_frame, end_frame, 1));
 }

@@ -17,7 +17,7 @@ CFLAGS = -std=gnu99 -ffreestanding -Wall -Wextra -Werror -fno-builtin \
 SRC = boot/boot.s kernel/kernel.c  lib/baselib.c kernel/screen.c kernel/GDT.c \
 lib/ports.s kernel/keyboard.c lib/printf.c lib/print_memory.c lib/m_dump.c \
 boot/get_memory_map.c kernel/IDT.c kernel/isr.c kernel/pic.c kernel/get_frame.c \
-boot/paging.s kernel/paging.c kernel/memory.c
+boot/paging.s kernel/paging.c kernel/memory.c kernel/get_page.c
 OBJECTS := $(SRC:%.c=%.o)
 OBJECTS := $(OBJECTS:%.s=%.o)
 DPS := $(OBJECTS:%.o=%.d)

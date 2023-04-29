@@ -1,16 +1,24 @@
 #include "stdint.h"
+#include "memory.h"
+#include "baselib.h"
+#include "stddef.h"
 
-struct s_pages {
-	void*		addr;
-	uint32_t	nbr;
-	uint32_t	flags;
-};
+#define LOW_MEM	0
+#define VMALOC	1
 
-void *get_page(uint32_t nbr)
+
+static void *get_page_in_lowmem(uint32_t nbr)
 {
-	// изначально всё пространство 0xE000000 - end_of_heap доступно
-	// берем страницу
-	frame = get_frames(nbr);
+	void frames = get_frames(heap_start, heap_end);
 
+	if (frames)
+		return (frames + PAGE_OFFSET);
+	return (NULL);
+}
 
+void *get_page(uint32_t flags, uint32_t nbr)
+{
+	if (flags == LOW_MEM)
+		return (get_page_in_lowmem(nbr));
+	return (NULL);
 }
