@@ -14,77 +14,37 @@
 #include "stdint.h"
 #include "baselib.h"
 #include "stddef.h"
-#define MAX_ADDR *(uint32_t *)((void *)&max_addr + 0xC0000000) // max_addr остался в загрузочной части
 
-/*
-	Bit mask page frame allocator
-*/
+static unsigned char	*bitmask;
+static uint32_t			bm_size;
 
-static void frame_allocator_init(unsigned char **arr, uint32_t *size)
+static void frame_allocator_init()
 {
-	uint32_t    frames_in_use;
-
-	// find size of array for bitmask
-	printf("max_addr = %x\n", MAX_ADDR);
-	*size = MAX_ADDR / 0x1000 / 8;
-	frames_in_use = ((uint32_t)&end_of_code - 0xC0000000) / 0x1000 + *size / 0x1000;
-
-	printf("Start of code %#x\n", &start_of_code);
-	printf("End of code %#x (%u frames)\n", &end_of_code, (uint32_t)(&end_of_code) / 0x1000);
-	printf("Bitmask array size: %u (%u frames)\n", *size, *size / 0x1000);
-	printf("Frames in use: %u frames\n", frames_in_use);
-	printf("Add pages for heap maping 256M %u frames\n", 64);
-	printf("Total frames: %u\n", frames_in_use + 64);
-
-	*arr = &end_of_code;
-	bzero(*arr, *size);
-
-	// mark used frames
-	for (uint32_t i = 0; i < frames_in_use + 64 ; i++) {
-		(*arr)[i / 8] = (*arr)[i / 8] | (1 << (i % 8));
-	}
-/* 	uint32_t tmp = *(uint32_t *)(0xF0000000);
-	(void)tmp; */
-	// map heap
-	/* uint32_t *heap_tables_frames = (uint32_t *)(frames_in_use * 0x1000);
-	uint32_t heap_frame = (frames_in_use + 64) * 0x1000;
-	uint32_t *pde = (uint32_t *)0xFFFFF000;
-	for (int i = 832; i < 896; i++) {
-		pde[i] = (uint32_t)heap_tables_frames | 3;
-		for (int j = 0; j < 1024; j++) {
-			heap_tables_frames[j] = ((uint32_t*)(heap_frame))[j] | 3;
-		}
-		heap_frame += 0x400;
-		heap_tables_frames += 0x400;
-	}
-	refresh_map(); */
+	bitmask = get_bitmask();
+	bm_size = get_bitmask_size();
 }
 
 int frame_status(uint32_t addr)
 {
-	unsigned char *arr = &end_of_code;
-
-	return (arr[addr / 0x1000 / 8] & \
+	return (bitmask[addr / 0x1000 / 8] & \
 		(1 << addr / 0x1000 % 8));
 }
 
 void free_frame(void* addr)
 {
-	unsigned char *arr = &end_of_code;
-
-	arr[(uint32_t)addr / 0x1000 / 8] = arr[(uint32_t)addr / 0x1000 / 8] & \
-		~((arr[(uint32_t)addr / 0x1000 / 8] & \
+	bitmask[(uint32_t)addr / 0x1000 / 8] = bitmask[(uint32_t)addr / 0x1000 / 8] & \
+		~((bitmask[(uint32_t)addr / 0x1000 / 8] & \
 			(1 << (uint32_t)addr / 0x1000 % 8)));
 }
 
-static void *mark_frames_occupied(unsigned char *arr, uint32_t i, int j, uint32_t frames)
+static void *mark_frames_occupied(uint32_t i, int j, uint32_t frames)
 {
 	void* ret_value = (void *)(0x1000 * (i * 8 + j));
 	uint32_t nbr = 0;
 
 	for ( ; nbr < frames; i++) {
 		for (; j < 8 && nbr < frames; j++) {
-			arr[i] = arr[i] | (1 << j);
+			bitmask[i] = bitmask[i] | (1 << j);
 			nbr++;
 		}
 		j = 0;
@@ -92,20 +52,20 @@ static void *mark_frames_occupied(unsigned char *arr, uint32_t i, int j, uint32_
 	return (ret_value);
 }
 
-static void *__get_frames(unsigned char *arr, uint32_t *i, int *j, uint32_t frames, uint32_t size)
+static void *__get_frames(uint32_t *i, int *j, uint32_t frames)
 {
 	uint32_t nbr = 0;
 	uint32_t i_begin = *i;
 	uint32_t j_begin = *j;
 
-	for (; *i < size; (*i)++) {
+	for (; *i < bm_size; (*i)++) {
 		for (; *j < 8; (*j)++) {
-			if (!(arr[*i] & (1 << *j)))
+			if (!(bitmask[*i] & (1 << *j)))
 				nbr++;
 			else
 				return (NULL);
 			if (nbr == frames)
-				return mark_frames_occupied(arr, i_begin, j_begin, frames);
+				return mark_frames_occupied(i_begin, j_begin, frames);
 		}
 		*j = 0;
 	}
@@ -114,18 +74,18 @@ static void *__get_frames(unsigned char *arr, uint32_t *i, int *j, uint32_t fram
 
 void *get_frames(uint32_t frames)
 {
-	static uint32_t			size;
-	static unsigned char	*arr;
 	void	*ret_value = NULL;
 
-	if (!arr)
-		frame_allocator_init(&arr, &size);
-	for (uint32_t i = 0; i < size && !ret_value; i++) {
-		if (arr[i] == 0xFF)
+	if (!bitmask) {
+		frame_allocator_init();
+	}
+
+	for (uint32_t i = 0; i < bm_size && !ret_value; i++) {
+		if (bitmask[i] == 0xFF)
 			continue;
 		for (int j = 0; j < 8 && !ret_value; j++) {
-			if (!(arr[i] & (1 << j))) {
-				ret_value = __get_frames(arr, &i, &j, frames, size);
+			if (!(bitmask[i] & (1 << j))) {
+				ret_value = __get_frames(&i, &j, frames);
 			}
 		}
 	}

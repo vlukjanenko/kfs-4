@@ -13,7 +13,9 @@
 #ifndef MEMORY_H
 # define MEMORY_H
 
-#include "stdint.h"
+# include "stdint.h"
+# define PAGE_OFFSET 0xC0000000
+# define PAGE_SIZE 4096
 
 extern uint32_t			max_addr;
 extern unsigned char	stack_top;
@@ -31,6 +33,9 @@ void enable_paging(void);
 void turn_on_paging(void);
 int frame_status(uint32_t addr);
 void refresh_map(void);
+void memory_init();
+unsigned char* 	get_bitmask();
+uint32_t 		get_bitmask_size();
 
 
 #endif

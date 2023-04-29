@@ -88,6 +88,7 @@ void	print_gdt()
 
 int	main(void)
 {
+	memory_init();
 	terminal_initialize(VGA_COLOR_WHITE, VGA_COLOR_BLACK);
 /* 	disable_cursor();
 	terminal_setcolor(VGA_COLOR_RED, VGA_COLOR_BLACK);

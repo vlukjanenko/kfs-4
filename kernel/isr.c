@@ -125,6 +125,8 @@ void	page_fault(struct interrupt_frame* frame, uint32_t error_code)
 	(void)frame;
 	(void)error_code;
 	printf("\nPage fault\n");
+	printf("Error code = %x\n", error_code);
+	__asm__ volatile ("cli; hlt");
 }
 
 void	coprocessor_error(struct interrupt_frame* frame)
