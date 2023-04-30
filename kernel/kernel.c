@@ -110,18 +110,23 @@ int	main(void)
 
 	printf("Position of symbol end_of_code = %x\n", &end_of_code); // предоположительно конец кода
 
-	printf("frame addr = %p\n", get_frame());
-	printf("frame addr = %p\n", get_frame());
-	void *tmp1 = get_frame();
+	printf("frame addr = %p\n", get_frame(0x10000, 0x11000));
+	printf("frame addr = %p\n", get_frame(0x10000, 0x11000));
+	void *tmp1 = get_frame(0x10000, 0x11000);
 	printf("tmp1 = %p\n", tmp1);
-	void *tmp2 = get_frame();
+	void *tmp2 = get_frame(0x10000, 0x11000);
 	printf("tmp2 = %p\n", tmp2);
-	printf("frame addr = %p\n", get_frame());
-	printf("frame addr = %p\n", get_frame());
-	printf("frames(8) addr = %p\n", get_frames(8));
+	printf("frame addr = %p\n", get_frame(0x10000, 0x11000));
+	printf("frame addr = %p\n", get_frame(0x10000, 0x11000));
+	printf("frames(8) addr = %p\n", get_frames(0x10000, 0x11000, 8));
+	printf("frames(1) addr = %p\n", get_frames(0x10000, 0x11000, 1));
 	free_frame(tmp1);
 	free_frame(tmp2);
-	printf("frames(2) addr = %p\n", get_frames(2));
+	printf("frames(2) addr = %p\n", get_frames(0x10000, 0x11000, 2));
+	void *tmp3 = get_page(LOW_MEM, 2);
+	printf("get_page addr = %p\n", tmp3);
+	free_page(tmp3, 2);
+	printf("get_page addr = %p\n", get_page(LOW_MEM, 2));
 
 	//turn_on_paging(); //запускаем из ассемблера до перехода в 0xC0000000
 	enable_cursor(0, 15);

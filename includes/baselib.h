@@ -41,5 +41,6 @@ int		tolower(int c);
 void	print_memory(void *ptr, size_t size);
 void	m_dump(const char *params);
 int		get_memory_map(struct multiboot_info *mbd, uint32_t magic);
+uint32_t	align(uint32_t addr);
 
 #endif

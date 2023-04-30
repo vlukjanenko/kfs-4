@@ -14,8 +14,11 @@
 # define MEMORY_H
 
 # include "stdint.h"
-# define PAGE_OFFSET 0xC0000000
-# define PAGE_SIZE 4096
+# define PAGE_OFFSET	0xC0000000
+# define PAGE_SIZE		4096
+# define LOW_MEM		0
+# define VMALOC			1
+# define MAX_ADDR *(uint32_t *)((void *)&max_addr + PAGE_OFFSET) // max_addr остался в загрузочной части
 
 extern uint32_t			max_addr;
 extern unsigned char	stack_top;
@@ -25,8 +28,8 @@ extern unsigned char	start_of_code;
 extern uint32_t pd_first_entry;
 extern uint32_t pt_first_entry;
 
-void *get_frame(void);
-void *get_frames(uint32_t frames);
+void *get_frame(uint32_t start_frame, uint32_t end_frame);
+void *get_frames(uint32_t start_frame, uint32_t end_frame, uint32_t frames);
 void free_frame(void* addr);
 void load_page_directory(void *page_directory);
 void enable_paging(void);
@@ -34,8 +37,12 @@ void turn_on_paging(void);
 int frame_status(uint32_t addr);
 void refresh_map(void);
 void memory_init();
-unsigned char* 	get_bitmask();
-uint32_t 		get_bitmask_size();
-
+unsigned char*	get_bitmask();
+uint32_t	get_bitmask_size();
+uint32_t	align(uint32_t val);
+void	*get_heap_start();
+void	*get_heap_end();
+void	*get_page(uint32_t flags, uint32_t nbr);
+void	free_page(void *page, uint32_t nbr);
 
 #endif
