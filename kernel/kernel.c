@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 19:00:59 by majosue           #+#    #+#             */
-/*   Updated: 2023/04/15 11:59:14 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/01 03:10:49 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,25 @@ int	main(void)
 	free_page(tmp3, 2);
 	printf("get_page addr = %p\n", get_page(LOW_MEM, 2));
 
+	void *var0 = kmalloc(4080);
+	(void)var0;
+	print_memory_list();
+
+	uint32_t *var = kmalloc(sizeof(uint32_t));
+	uint32_t *var2 = kmalloc(sizeof(uint32_t));
+	uint32_t *var3 = kmalloc(PAGE_SIZE * 2);
+	(void)var2;
+	(void)var3;
+
+	if (var) {
+	*var = 194;
+
+	printf("var = %u\n", *var);
+	printf("sizeof var = %u\n", ksize(var));
+	} else {
+		printf("kmalloc return NULL\n");
+	}
+	print_memory_list();
 	//turn_on_paging(); //запускаем из ассемблера до перехода в 0xC0000000
 	enable_cursor(0, 15);
 	poll_keyboard(NULL);

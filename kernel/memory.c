@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 00:05:27 by majosue           #+#    #+#             */
-/*   Updated: 2023/04/30 00:17:46 by majosue          ###   ########.fr       */
+/*   Updated: 2023/04/30 14:10:49 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ void	*get_heap_end()
 	return (heap_end);
 }
 
-uint32_t	align(uint32_t addr)
+uint32_t	align(uint32_t addr, uint32_t boundary)
 {
-	return (((addr + (PAGE_SIZE - 1)) / PAGE_SIZE) * PAGE_SIZE);
+	return (((addr + (boundary - 1)) / boundary) * boundary);
 }
 
 /*
@@ -78,12 +78,12 @@ void memory_init()
 	uint32_t frames_in_use;
 
 	// размер доступной физической памяти из загрузчика - align(MAX_ADDR)
-	printf("Size of ph. memory (page aligned) = %x\n", align(MAX_ADDR));
+	printf("Size of ph. memory (page aligned) = %x\n", align(MAX_ADDR, PAGE_SIZE));
 	// размер массива для описания памяти - bm_size
-	bm_size = align(MAX_ADDR) / PAGE_SIZE / 8;
+	bm_size = align(MAX_ADDR, PAGE_SIZE) / PAGE_SIZE / 8;
 	printf("Size of bit bitmask array %u bytes\n", bm_size);
 	// занято страниц кодом и битовой маской - frames_in_use
-	frames_in_use = PHISYCAL_EOC / PAGE_SIZE + align(bm_size) / PAGE_SIZE;
+	frames_in_use = PHISYCAL_EOC / PAGE_SIZE + align(bm_size, PAGE_SIZE) / PAGE_SIZE;
 	// начало таблиц для трансляии 512M (128 таблиц)
 	tables = (uint32_t *)(frames_in_use * PAGE_SIZE + PAGE_OFFSET);
 	// тут начнется куча

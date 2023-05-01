@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 10:50:09 by majosue           #+#    #+#             */
-/*   Updated: 2023/04/30 00:01:01 by majosue          ###   ########.fr       */
+/*   Updated: 2023/04/30 14:08:23 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void frame_allocator_init()
 {
 	bitmask = get_bitmask();
 	bm_size = get_bitmask_size();
-	max_pfn = align(MAX_ADDR) / PAGE_SIZE;
+	max_pfn = align(MAX_ADDR, PAGE_SIZE) / PAGE_SIZE;
 }
 
 static void pfn_to_idxs(uint32_t pfn, uint32_t *i, uint32_t *j)

@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 18:58:15 by majosue           #+#    #+#             */
-/*   Updated: 2023/02/02 07:59:42 by majosue          ###   ########.fr       */
+/*   Updated: 2023/04/30 14:10:34 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,5 @@ int		tolower(int c);
 void	print_memory(void *ptr, size_t size);
 void	m_dump(const char *params);
 int		get_memory_map(struct multiboot_info *mbd, uint32_t magic);
-uint32_t	align(uint32_t addr);
 
 #endif
