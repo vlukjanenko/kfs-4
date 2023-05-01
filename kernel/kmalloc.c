@@ -6,9 +6,13 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 02:39:38 by majosue           #+#    #+#             */
-/*   Updated: 2023/05/01 03:10:42 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/01 03:53:21 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/*
+	минимальный размер выделения = sizeof(t_block) = 16 байт
+*/
 
 #include "memory.h"
 #include "stddef.h"
@@ -59,7 +63,7 @@ static void *find_free_block(t_block *lst, uint32_t size_with_header, uint32_t s
 		if (lst->size == size_with_header - sizeof(t_block)) { // если 1:1 к свободному блоку просто меняем статус
 			lst->status = 1;
 			lst->size = size; // при освобождении выровнять по заголовку!!!
-			return (lst + 1);
+			return (lst + 1); // возвращаем указатель за заголовком
 		}
 		if (lst->size > size_with_header) {
 			new_block = (void *)lst + lst->size + sizeof(t_block) - size_with_header;
@@ -69,7 +73,7 @@ static void *find_free_block(t_block *lst, uint32_t size_with_header, uint32_t s
 			new_block->next = lst->next;
 			new_block->prev = lst;
 			lst->next = new_block;
-			return (new_block + 1);
+			return (new_block + 1); // возвращаем указатель за заголовком
 		}
 		lst = lst->next;
 	}
@@ -121,4 +125,12 @@ void *kmalloc(uint32_t size)
 		result = find_free_block(new_block, size_with_header, size);
 	}
 	return (result);
+}
+
+void kfree(void *ptr)
+{
+	t_block *block = ptr - sizeof(t_block);
+
+	block->status = 0;
+	block->size = align(block->size, sizeof(t_block));
 }

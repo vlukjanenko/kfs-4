@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 20:57:49 by majosue           #+#    #+#             */
-/*   Updated: 2023/05/01 02:22:36 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/01 03:28:46 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,6 @@ void	free_page(void *page, uint32_t nbr);
 void	*kmalloc(uint32_t size);
 uint32_t	ksize(void *ptr);
 void	print_memory_list(); // for kmallock debug
+void	kfree(void *ptr);
 
 #endif

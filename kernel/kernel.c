@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 19:00:59 by majosue           #+#    #+#             */
-/*   Updated: 2023/05/01 03:10:49 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/01 03:29:52 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,15 @@ int	main(void)
 		printf("kmalloc return NULL\n");
 	}
 	print_memory_list();
-	//turn_on_paging(); //запускаем из ассемблера до перехода в 0xC0000000
+	printf("================\n");
+	kfree(var0);
+	kfree(var);
+	kfree(var2);
+	kfree(var3);
+	print_memory_list();
+	var0 = kmalloc(sizeof(long));
+	printf("================\n");
+	print_memory_list();
 	enable_cursor(0, 15);
 	poll_keyboard(NULL);
 	return (0);
