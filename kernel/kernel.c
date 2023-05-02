@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 19:00:59 by majosue           #+#    #+#             */
-/*   Updated: 2023/05/01 03:29:52 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/02 08:17:51 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int	main(void)
 	printf("                              ###   ########.fr\n"); */
 	//print_stack();
 	//print_gdt();
-
+/*
 	printf("Position of symbol end_of_code = %x\n", &end_of_code); // предоположительно конец кода
 
 	printf("frame addr = %p\n", get_frame(0x10000, 0x11000));
@@ -155,7 +155,8 @@ int	main(void)
 	print_memory_list();
 	var0 = kmalloc(sizeof(long));
 	printf("================\n");
-	print_memory_list();
+	print_memory_list(); */
+	get_page(VMALLOC, 10);
 	enable_cursor(0, 15);
 	poll_keyboard(NULL);
 	return (0);

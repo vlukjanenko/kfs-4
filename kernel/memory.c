@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 00:05:27 by majosue           #+#    #+#             */
-/*   Updated: 2023/04/30 14:10:49 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/02 07:03:31 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ static unsigned char	*bitmask = &end_of_code;
 static uint32_t			bm_size;
 static uint32_t			*tables;
 static void				*heap_start;
-static void				*heap_end; // следующий за последним валидным адресом
+static void				*heap_end; // конец зоны LOW_MEM
+static void				*vmalloc_end;
 
 unsigned char*	get_bitmask()
 {
@@ -43,13 +44,19 @@ void	*get_heap_end()
 	return (heap_end);
 }
 
+void	*get_vmalloc_end()
+{
+	return (vmalloc_end);
+}
+
 uint32_t	align(uint32_t addr, uint32_t boundary)
 {
 	return (((addr + (boundary - 1)) / boundary) * boundary);
 }
 
 /*
-	первые 512М физической  0x0 - 0x20000000 мапим к 0xC000000 - 0xE0000000 виртуальной
+	первые 256 физической  0x0 - 0x10000000 мапим к 0xC0000000 - 0xD0000000 виртуальной (HIGH_MEM)
+	и создаём таблицы для диапазона 0xD0000000 - 0xE0000000 (VMALLOC)
 */
 static void	intital_map()
 {
@@ -58,7 +65,10 @@ static void	intital_map()
 
 	for (int i = 768; i < 896; i++, tables += 1024) {
 		for (int j = 0; j < 1024; j++, frames += PAGE_SIZE) {
-			tables[j] = frames | 3;
+			if (i < 832)
+				tables[j] = frames | 3;
+			else
+				tables[j] = 0;
 		}
 		pde[i] = ((uint32_t)tables - PAGE_OFFSET) | 3; // в pde физические адреса таблиц!
 	}
@@ -88,7 +98,8 @@ void memory_init()
 	tables = (uint32_t *)(frames_in_use * PAGE_SIZE + PAGE_OFFSET);
 	// тут начнется куча
 	heap_start = (void *)((frames_in_use + 128) * PAGE_SIZE + PAGE_OFFSET);
-	heap_end = (void *)0xE0000000; // тут куча закончится (sbrk будет это менять ?)
+	heap_end = (void *)0xD0000000;
+	vmalloc_end = (void *)0xE0000000;
 	intital_map();
 	// помечаем занятые фреймы
 	bzero(bitmask, bm_size);

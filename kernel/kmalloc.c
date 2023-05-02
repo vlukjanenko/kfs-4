@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 02:39:38 by majosue           #+#    #+#             */
-/*   Updated: 2023/05/01 03:53:21 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/02 05:16:53 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "stddef.h"
 #include "stdint.h"
 #include "baselib.h"
+#define MAX_SIZE_LIMIT 0x000400000
 
 typedef struct s_block {
 	void		*next;
@@ -118,6 +119,8 @@ void *kmalloc(uint32_t size)
 	t_block		*new_block;
 	uint32_t	size_with_header;
 
+	if (size >= MAX_SIZE_LIMIT)
+		return (NULL);
 	size_with_header = align(size + sizeof(t_block), sizeof(t_block));
 	result = find_free_block(block_list, size_with_header, size);
 	if (!result) {
@@ -129,6 +132,8 @@ void *kmalloc(uint32_t size)
 
 void kfree(void *ptr)
 {
+	if (!ptr)
+		return;
 	t_block *block = ptr - sizeof(t_block);
 
 	block->status = 0;
