@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 19:00:59 by majosue           #+#    #+#             */
-/*   Updated: 2023/05/02 08:17:51 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/04 15:21:53 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,58 @@ void	print_gdt()
 	}
 }
 
+void get_page_test()
+{
+	void *ptrs[10];
+	void *big_one;
+
+	for (int i = 0; i < 10; i++) {
+		ptrs[i] = get_page(VMALLOC, 1);
+		print_pages(ptrs[i], 1);
+	}
+	free_page(ptrs[1],1);
+	free_page(ptrs[3],1);
+	free_page(ptrs[5],1);
+	free_page(ptrs[7],1);
+	free_page(ptrs[9],1);
+	big_one = get_page(VMALLOC, 5);
+	printf("\n");
+	print_pages(big_one, 5);
+}
+
+void kmalloc_test()
+{
+	void *var0 = kmalloc(4080);
+
+	print_memory_list();
+
+	uint32_t *var = kmalloc(sizeof(uint32_t));
+	uint32_t *var2 = kmalloc(sizeof(uint32_t));
+	uint32_t *var3 = kmalloc(PAGE_SIZE * 2);
+	(void)var0;
+	(void)var2;
+	(void)var3;
+
+	if (var) {
+		*var = 194;
+
+		printf("var = %u\n", *var);
+		printf("sizeof var = %u\n", ksize(var));
+	} else {
+		printf("kmalloc return NULL\n");
+	}
+	print_memory_list();
+	printf("================\n");
+	kfree(var0);
+	kfree(var);
+	kfree(var2);
+	kfree(var3);
+	print_memory_list();
+	var0 = kmalloc(sizeof(long));
+	printf("================\n");
+	print_memory_list();
+}
+
 int	main(void)
 {
 	memory_init();
@@ -107,56 +159,8 @@ int	main(void)
 	printf("                              ###   ########.fr\n"); */
 	//print_stack();
 	//print_gdt();
-/*
-	printf("Position of symbol end_of_code = %x\n", &end_of_code); // предоположительно конец кода
-
-	printf("frame addr = %p\n", get_frame(0x10000, 0x11000));
-	printf("frame addr = %p\n", get_frame(0x10000, 0x11000));
-	void *tmp1 = get_frame(0x10000, 0x11000);
-	printf("tmp1 = %p\n", tmp1);
-	void *tmp2 = get_frame(0x10000, 0x11000);
-	printf("tmp2 = %p\n", tmp2);
-	printf("frame addr = %p\n", get_frame(0x10000, 0x11000));
-	printf("frame addr = %p\n", get_frame(0x10000, 0x11000));
-	printf("frames(8) addr = %p\n", get_frames(0x10000, 0x11000, 8));
-	printf("frames(1) addr = %p\n", get_frames(0x10000, 0x11000, 1));
-	free_frame(tmp1);
-	free_frame(tmp2);
-	printf("frames(2) addr = %p\n", get_frames(0x10000, 0x11000, 2));
-	void *tmp3 = get_page(LOW_MEM, 2);
-	printf("get_page addr = %p\n", tmp3);
-	free_page(tmp3, 2);
-	printf("get_page addr = %p\n", get_page(LOW_MEM, 2));
-
-	void *var0 = kmalloc(4080);
-	(void)var0;
-	print_memory_list();
-
-	uint32_t *var = kmalloc(sizeof(uint32_t));
-	uint32_t *var2 = kmalloc(sizeof(uint32_t));
-	uint32_t *var3 = kmalloc(PAGE_SIZE * 2);
-	(void)var2;
-	(void)var3;
-
-	if (var) {
-	*var = 194;
-
-	printf("var = %u\n", *var);
-	printf("sizeof var = %u\n", ksize(var));
-	} else {
-		printf("kmalloc return NULL\n");
-	}
-	print_memory_list();
-	printf("================\n");
-	kfree(var0);
-	kfree(var);
-	kfree(var2);
-	kfree(var3);
-	print_memory_list();
-	var0 = kmalloc(sizeof(long));
-	printf("================\n");
-	print_memory_list(); */
-	get_page(VMALLOC, 10);
+	//kmalloc_test();
+	get_page_test();
 	enable_cursor(0, 15);
 	poll_keyboard(NULL);
 	return (0);
