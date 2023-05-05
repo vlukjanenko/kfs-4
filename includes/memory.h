@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 20:57:49 by majosue           #+#    #+#             */
-/*   Updated: 2023/05/04 13:53:28 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/05 00:09:29 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,28 +28,27 @@ extern unsigned char	start_of_code;
 extern uint32_t pd_first_entry;
 extern uint32_t pt_first_entry;
 
-void *get_frame(uint32_t start_frame, uint32_t end_frame);
-void *get_frames(uint32_t start_frame, uint32_t end_frame, uint32_t frames);
-void free_frame(void* addr);
-void load_page_directory(void *page_directory);
-void enable_paging(void);
-void turn_on_paging(void);
-int frame_status(uint32_t addr);
-void refresh_map(void);
-void memory_init();
+void			*get_frame(void *start, void *end);
+void			*get_frames(void *start, void *end, uint32_t frames);
+void			free_frame(void* addr);
+void			load_page_directory(void *page_directory);
+void			enable_paging(void);
+void			turn_on_paging(void);
+int				frame_status(uint32_t addr);
+void			refresh_map(void);
+void 			memory_init();
 unsigned char*	get_bitmask();
-uint32_t	get_bitmask_size();
-uint32_t	align(uint32_t addr, uint32_t boundary);
-void	*get_heap_start();
-void	*get_heap_end();
-void	*get_page(uint32_t flags, uint32_t nbr);
-void	free_page(void *page, uint32_t nbr);
-void	*kmalloc(uint32_t size);
-uint32_t	ksize(void *ptr);
-void	print_memory_list(); // for kmallock debug
-void	kfree(void *ptr);
-void	*get_vmalloc_end();
-void	print_pages(void *page, uint32_t nbr); // map pages debug
-
+uint32_t		get_bitmask_size();
+uint32_t		align(uint32_t addr, uint32_t boundary);
+void			*get_heap_start();
+void			*get_heap_end();
+void			*get_page(uint32_t flags, uint32_t nbr);
+void			free_page(void *page, uint32_t nbr);
+void			*kmalloc(uint32_t size);
+uint32_t		ksize(void *ptr);
+void			print_memory_list(); // for kmalloc debug
+void			kfree(void *ptr);
+void			*get_vmalloc_end();
+void			print_pages(void *page, uint32_t nbr); // map pages debug
 
 #endif

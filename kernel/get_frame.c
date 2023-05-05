@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 10:50:09 by majosue           #+#    #+#             */
-/*   Updated: 2023/04/30 14:08:23 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/05 00:11:47 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void frame_allocator_init()
 {
 	bitmask = get_bitmask();
 	bm_size = get_bitmask_size();
-	max_pfn = align(MAX_ADDR, PAGE_SIZE) / PAGE_SIZE;
+	max_pfn = MAX_ADDR / PAGE_SIZE;
 }
 
 static void pfn_to_idxs(uint32_t pfn, uint32_t *i, uint32_t *j)
@@ -34,7 +34,7 @@ static void pfn_to_idxs(uint32_t pfn, uint32_t *i, uint32_t *j)
 
 int frame_status(uint32_t addr)
 {
-	uint32_t pfn =  (uint32_t)addr / PAGE_SIZE;
+	uint32_t pfn = (uint32_t)addr / PAGE_SIZE;
 	uint32_t i;
 	uint32_t j;
 
@@ -97,12 +97,16 @@ static void *__get_frames(uint32_t end_frame, uint32_t *i, \
 	return (NULL);
 }
 
-void *get_frames(uint32_t start_frame, uint32_t end_frame, uint32_t frames)
+void *get_frames(void *start, void *end, uint32_t frames)
 {
 	void	*ret_value = NULL;
 	uint32_t i;
 	uint32_t j;
+	uint32_t start_frame;
+	uint32_t end_frame;
 
+	start_frame = (uint32_t)start / PAGE_SIZE;
+	end_frame = (uint32_t)end / PAGE_SIZE;
 	if (!bitmask) {
 		frame_allocator_init();
 	}
@@ -120,7 +124,7 @@ void *get_frames(uint32_t start_frame, uint32_t end_frame, uint32_t frames)
 	return (ret_value);
 }
 
-void *get_frame(uint32_t start_frame, uint32_t end_frame)
+void *get_frame(void *start_frame, void *end_frame)
 {
 	return (get_frames(start_frame, end_frame, 1));
 }

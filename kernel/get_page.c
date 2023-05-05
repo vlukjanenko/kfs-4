@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 23:50:36 by majosue           #+#    #+#             */
-/*   Updated: 2023/05/04 14:50:14 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/05 00:05:00 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,7 @@ static void	*get_page_in_lowmem(uint32_t nbr)
 
 	if (!heap_start)
 		get_page_init();
-	frames = get_frames((uint32_t)(heap_start - PAGE_OFFSET) / PAGE_SIZE, \
-						(uint32_t)(heap_end - PAGE_OFFSET) / PAGE_SIZE, nbr);
+	frames = get_frames(heap_start - PAGE_OFFSET, heap_end - PAGE_OFFSET, nbr);
 	if (frames)
 		return (frames + PAGE_OFFSET);
 	return (NULL);
@@ -49,7 +48,7 @@ static void free_page_in_lowmem(void *page, uint32_t nbr)
 }
 
 /* https://wiki.osdev.org/Paging */
-uint32_t *get_page_table_entry(void *virtualaddr)
+static uint32_t	*get_page_table_entry(void *virtualaddr)
 {
 	uint32_t pdindex = (uint32_t)virtualaddr >> 22;
 	uint32_t ptindex = (uint32_t)virtualaddr >> 12 & 0x03FF;
@@ -60,7 +59,7 @@ uint32_t *get_page_table_entry(void *virtualaddr)
 	return (pt_entry);
 }
 
-int is_page_maped(void *ptr)
+static int	is_page_maped(void *ptr)
 {
 	return (*get_page_table_entry(ptr) & 1);
 }
@@ -86,7 +85,7 @@ uint32_t *get_non_continuous_frames(uint32_t nbr)
 	if (!frames)
 		return (NULL);
 	for (uint32_t i = 0; i < nbr; i++) {
-		frames[i] = (uint32_t)get_frame((uint32_t)(heap_end - PAGE_OFFSET) / PAGE_SIZE, align(MAX_ADDR, PAGE_SIZE) / PAGE_SIZE);
+		frames[i] = (uint32_t)get_frame(heap_end - PAGE_OFFSET, (void *)MAX_ADDR);
 		if (!frames[i]) {
 			kfree(frames);
 			frames = NULL;
@@ -105,7 +104,7 @@ static void map_pages(void *pages, uint32_t *frames, uint32_t nbr)
 	refresh_map();
 }
 
-static void	*get_page_in_highmem(uint32_t nbr) // делаем так чтоб она не брала странички в lowmem зоне
+static void	*get_page_in_highmem(uint32_t nbr)
 {
 	void		*start;
 	void		*end;
@@ -143,7 +142,7 @@ void *get_page(uint32_t flags, uint32_t nbr)
 	return (NULL);
 }
 
-static void free_page_in_highmem(void *page, uint32_t nbr)
+static void	free_page_in_highmem(void *page, uint32_t nbr)
 {
 	for (uint32_t i = 0; i < nbr; i++, page += PAGE_SIZE)
 	{
@@ -155,7 +154,7 @@ static void free_page_in_highmem(void *page, uint32_t nbr)
 	refresh_map();
 }
 
-void free_page(void *page, uint32_t nbr)
+void	free_page(void *page, uint32_t nbr)
 {
 	if (page >= heap_start && page < heap_end)
 		free_page_in_lowmem(page, nbr);
@@ -163,7 +162,7 @@ void free_page(void *page, uint32_t nbr)
 		free_page_in_highmem(page, nbr);
 }
 
-void print_pages(void *page, uint32_t nbr)
+void	print_pages(void *page, uint32_t nbr)
 {
 	for (uint32_t i = 0; i < nbr; i++, page += PAGE_SIZE) {
 		printf("%x => %x\n", page, *get_page_table_entry(page) & ~0xFFF);
