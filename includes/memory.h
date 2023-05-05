@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 20:57:49 by majosue           #+#    #+#             */
-/*   Updated: 2023/05/05 00:09:29 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/05 12:19:01 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,15 @@ void			*get_heap_end();
 void			*get_page(uint32_t flags, uint32_t nbr);
 void			free_page(void *page, uint32_t nbr);
 void			*kmalloc(uint32_t size);
+void			*vmalloc(uint32_t size);
 uint32_t		ksize(void *ptr);
+uint32_t		vsize(void *ptr);
 void			print_memory_list(); // for kmalloc debug
 void			kfree(void *ptr);
+void			vfree(void *ptr);
 void			*get_vmalloc_end();
 void			print_pages(void *page, uint32_t nbr); // map pages debug
+void			print_vmalloc_list(void); // for vmalloc debug
+
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 19:00:59 by majosue           #+#    #+#             */
-/*   Updated: 2023/05/04 15:21:53 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/05 13:14:03 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,31 @@ void kmalloc_test()
 	print_memory_list();
 }
 
+void vmalloc_test()
+{
+	void *var[4];
+	var[0] = vmalloc(1);
+	var[1] = vmalloc(10 * PAGE_SIZE);
+	var[2] = vmalloc(100 * PAGE_SIZE);
+
+	for (int i = 0; i < 3; i++) {
+		printf("var[%d] addr = %p, size = %u\n", i, var[i], vsize(var[i]));
+	}
+	print_vmalloc_list();
+	vfree(var[2]);
+	print_vmalloc_list();
+	var[3] = vmalloc(1000 * PAGE_SIZE);
+	printf("var[%d] addr = %p, size = %u\n", 3, var[3], vsize(var[3]));
+	print_vmalloc_list();
+	vfree(var[0]);
+	print_vmalloc_list();
+	vfree(var[1]);
+	vfree(var[2]);
+	print_vmalloc_list();
+	var[1] = vmalloc(10 * PAGE_SIZE);
+	print_vmalloc_list();
+}
+
 int	main(void)
 {
 	memory_init();
@@ -160,7 +185,8 @@ int	main(void)
 	//print_stack();
 	//print_gdt();
 	//kmalloc_test();
-	get_page_test();
+	//get_page_test();
+	vmalloc_test();
 	enable_cursor(0, 15);
 	poll_keyboard(NULL);
 	return (0);
