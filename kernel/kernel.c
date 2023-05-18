@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 19:00:59 by majosue           #+#    #+#             */
-/*   Updated: 2023/05/05 13:14:03 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/18 02:58:19 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,6 +188,10 @@ int	main(void)
 	//get_page_test();
 	vmalloc_test();
 	enable_cursor(0, 15);
-	poll_keyboard(NULL);
+	printf("$ ");
+	while(1) {
+		asm("hlt\n\t");
+	};
+	//poll_keyboard(NULL);
 	return (0);
 }

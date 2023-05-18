@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 13:23:03 by majosue           #+#    #+#             */
-/*   Updated: 2023/02/15 12:02:27 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/17 14:07:39 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ void PIC_sendEOI()
 void PIC_remap(int offset1, int offset2)
 {
 	unsigned char a1, a2;
- 
+
 	a1 = inb(PIC1_DATA);						// save masks
 	a2 = inb(PIC2_DATA);
 	(void)a1;
 	(void)a2;
- 
+
 	outb(PIC1_COMMAND, ICW1_INIT | ICW1_ICW4);	// starts the initialization sequence (in cascade mode)
 	io_wait();
 	outb(PIC2_COMMAND, ICW1_INIT | ICW1_ICW4);
@@ -45,20 +45,20 @@ void PIC_remap(int offset1, int offset2)
 	io_wait();
 	outb(PIC2_DATA, 2);                         // ICW3: tell Slave PIC its cascade identity (0000 0010)
 	io_wait();
- 
+
 	outb(PIC1_DATA, ICW4_8086);
 	io_wait();
 	outb(PIC2_DATA, ICW4_8086);
 	io_wait();
- /* 
+
 	outb(PIC1_DATA, 0xfd);						// allow keyboard only irq.
 	outb(PIC2_DATA, 0xff);
- */	
 
+/*
 	outb(PIC1_DATA, 0xff);						// disable all irq
 	outb(PIC2_DATA, 0xff);
-
-/* 
+*/
+/*
 	outb(PIC1_DATA, a1);						// restore saved masks.
 	outb(PIC2_DATA, a2);
 */

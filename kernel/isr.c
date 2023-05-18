@@ -6,13 +6,14 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 17:21:42 by majosue           #+#    #+#             */
-/*   Updated: 2023/02/09 16:19:54 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/18 02:45:30 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "baselib.h"
 #include "isr.h"
 #include "pic.h"
+#include "keyboard.h"
 
 void panic(char* str)
 {
@@ -157,9 +158,10 @@ void	simd_coprocessor_error(struct interrupt_frame* frame)
 void	keyboard_isr(struct interrupt_frame* frame)
 {
 	(void)frame;
-	printf("Keyboard interrupt captured\n");
+	do_keyboard();
+/* 	printf("Keyboard interrupt captured\n");
 	unsigned char scan_code = inb(0x60);
-	(void)scan_code;
+	(void)scan_code; */
 	PIC_sendEOI();
 	//printf("scan code %#x\n", scan_code);
 }

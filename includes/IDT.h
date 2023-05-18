@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 18:58:31 by majosue           #+#    #+#             */
-/*   Updated: 2023/02/09 15:50:53 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/18 10:05:29 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,10 @@ typedef struct {
 } __attribute__((packed)) idt_entry_t;
 
 void			idt_init(void);
+void			set_intr_gate(uint8_t n, void* addr); // interrunt DPL = 0
+void			set_system_gate(uint8_t n, void* addr); // trap DPL = 3
+void			set_system_intr_gate(uint8_t n, void* addr); // interrupt DPL = 3
+void			set_trap_gate(uint8_t n, void* addr); // trap DPL = 0
+
 
 #endif

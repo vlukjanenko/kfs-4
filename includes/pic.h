@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 12:13:16 by majosue           #+#    #+#             */
-/*   Updated: 2023/02/09 13:41:35 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/18 10:16:47 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 #ifndef PIC_H
 # define PIC_H
+
+#include "stdint.h"
 
 # define PIC1			   	0x20		/* IO base address for master PIC */
 # define PIC2			   	0xA0		/* IO base address for slave PIC */
@@ -28,7 +30,7 @@
 # define ICW1_INTERVAL4		0x04		/* Call address interval 4 (8) */
 # define ICW1_LEVEL			0x08		/* Level triggered (edge) mode */
 # define ICW1_INIT			0x10		/* Initialization - required! */
- 
+
 # define ICW4_8086			0x01		/* 8086/88 (MCS-80/85) mode */
 # define ICW4_AUTO			0x02		/* Auto (normal) EOI */
 # define ICW4_BUF_SLAVE		0x08		/* Buffered mode/slave */
@@ -38,5 +40,9 @@
 
 void  PIC_remap(int offset1, int offset2);
 void  PIC_sendEOI();
+void  irq_disable(void); // sti
+void  irq_enable(void); // cli
+void  irq_mask(uint8_t n);
+void  irq_unmask(uint8_t n);
 
 #endif

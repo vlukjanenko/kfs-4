@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 18:25:01 by majosue           #+#    #+#             */
-/*   Updated: 2023/02/09 15:18:47 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/17 14:43:30 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 #include "pic.h"
 #include "isr.h"
 
-void idt_set_descriptor(void* isr, uint8_t flags, idt_entry_t* descriptor) 
-{ 
+void idt_set_descriptor(void* isr, uint8_t flags, idt_entry_t* descriptor)
+{
 	descriptor->isr_low        = (uint32_t)isr & 0xFFFF;
 	descriptor->kernel_cs      = 0x08; // this value can be whatever offset your kernel code selector is in your GDT
 	descriptor->attributes     = flags;
@@ -24,7 +24,7 @@ void idt_set_descriptor(void* isr, uint8_t flags, idt_entry_t* descriptor)
 	descriptor->reserved       = 0;
 }
 
-void idt_init() 
+void idt_init()
 {
 	idt_entry_t		idt[256];
 	static idtr_t	idtr;
@@ -56,6 +56,6 @@ void idt_init()
 	idt_set_descriptor(keyboard_isr, 0x8E, &idt[33]);
 	memcpy((char *) idtr.base, (char *) idt, idtr.limit + 1);
 	__asm__ volatile ("lidt %0" : : "m"(idtr)); // load the new IDT
-	PIC_remap(0x20, 0x70); 
-	__asm__ volatile ("sti"); // set the interrupt flag 
+	PIC_remap(0x20, 0x70);
+	__asm__ volatile ("sti"); // set the interrupt flag
 }
