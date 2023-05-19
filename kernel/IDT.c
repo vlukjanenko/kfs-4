@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 18:25:01 by majosue           #+#    #+#             */
-/*   Updated: 2023/05/19 07:45:31 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/19 11:19:25 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@
 
 void idt_set_descriptor(void* isr, uint8_t flags, idt_entry_t* descriptor)
 {
-	descriptor->isr_low        = (uint32_t)isr & 0xFFFF;
-	descriptor->kernel_cs      = 0x08; // this value can be whatever offset your kernel code selector is in your GDT
-	descriptor->attributes     = flags;
-	descriptor->isr_high       = (uint32_t)isr >> 16;
-	descriptor->reserved       = 0;
+	descriptor->isr_low = (uint32_t)isr & 0xFFFF;
+	descriptor->kernel_cs = 0x08; // this value can be whatever offset your kernel code selector is in your GDT
+	descriptor->attributes = flags;
+	descriptor->isr_high = (uint32_t)isr >> 16;
+	descriptor->reserved = 0;
 }
 
 void idt_init()

@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 13:23:03 by majosue           #+#    #+#             */
-/*   Updated: 2023/05/19 08:39:40 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/19 11:21:18 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void PIC_remap(int offset1, int offset2)
 	io_wait();
 	outb(PIC1_DATA, 4);							// ICW3: tell Master PIC that there is a slave PIC at IRQ2 (0000 0100)
 	io_wait();
-	outb(PIC2_DATA, 2);                         // ICW3: tell Slave PIC its cascade identity (0000 0010)
+	outb(PIC2_DATA, 2);							// ICW3: tell Slave PIC its cascade identity (0000 0010)
 	io_wait();
 
 	outb(PIC1_DATA, ICW4_8086);
@@ -64,30 +64,30 @@ void PIC_remap(int offset1, int offset2)
 */
 }
 
-void irq_set_mask(unsigned char irq_line) {
-    uint16_t port;
-    uint8_t value;
+void	irq_set_mask(unsigned char irq_line) {
+	uint16_t port;
+	uint8_t value;
 
-    if(irq_line < 8) {
-        port = PIC1_DATA;
-    } else {
-        port = PIC2_DATA;
-        irq_line -= 8;
-    }
-    value = inb(port) | (1 << irq_line);
-    outb(port, value);
+	if(irq_line < 8) {
+		port = PIC1_DATA;
+	} else {
+		port = PIC2_DATA;
+		irq_line -= 8;
+	}
+	value = inb(port) | (1 << irq_line);
+	outb(port, value);
 }
 
-void irq_clear_mask(unsigned char irq_line) {
-    uint16_t port;
-    uint8_t value;
+void	irq_clear_mask(unsigned char irq_line) {
+	uint16_t port;
+	uint8_t value;
 
-    if(irq_line < 8) {
-        port = PIC1_DATA;
-    } else {
-        port = PIC2_DATA;
-        irq_line -= 8;
-    }
-    value = inb(port) & ~(1 << irq_line);
-    outb(port, value);
+	if(irq_line < 8) {
+		port = PIC1_DATA;
+	} else {
+		port = PIC2_DATA;
+		irq_line -= 8;
+	}
+	value = inb(port) & ~(1 << irq_line);
+	outb(port, value);
 }

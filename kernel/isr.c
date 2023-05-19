@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 17:21:42 by majosue           #+#    #+#             */
-/*   Updated: 2023/05/19 08:47:27 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/19 11:24:29 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,11 +159,7 @@ void	keyboard_isr(struct interrupt_frame* frame)
 {
 	(void)frame;
 	do_keyboard();
-/* 	printf("Keyboard interrupt captured\n");
-	unsigned char scan_code = inb(0x60);
-	(void)scan_code; */
 	PIC_sendEOI();
-	//printf("scan code %#x\n", scan_code);
 }
 
 void	timer_isr(struct interrupt_frame* frame)

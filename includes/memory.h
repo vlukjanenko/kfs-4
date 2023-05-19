@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 20:57:49 by majosue           #+#    #+#             */
-/*   Updated: 2023/05/05 12:19:01 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/19 11:26:15 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,5 @@ void			vfree(void *ptr);
 void			*get_vmalloc_end();
 void			print_pages(void *page, uint32_t nbr); // map pages debug
 void			print_vmalloc_list(void); // for vmalloc debug
-
 
 #endif
