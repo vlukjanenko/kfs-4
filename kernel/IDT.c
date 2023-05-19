@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 18:25:01 by majosue           #+#    #+#             */
-/*   Updated: 2023/05/17 14:43:30 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/19 07:45:31 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,35 @@ void idt_init()
 	memcpy((char *) idtr.base, (char *) idt, idtr.limit + 1);
 	__asm__ volatile ("lidt %0" : : "m"(idtr)); // load the new IDT
 	PIC_remap(0x20, 0x70);
+	__asm__ volatile ("sti"); // set the interrupt flag
+}
+
+void			set_intr_gate(uint8_t n, void* addr) // interrunt DPL = 0
+{
+	idt_set_descriptor(addr, 0x8E, (idt_entry_t *)(IDTBASE + n * 8));
+}
+
+void			set_system_gate(uint8_t n, void* addr) // trap DPL = 3
+{
+	idt_set_descriptor(addr, 0xEF, (idt_entry_t *)(IDTBASE + n * 8));
+}
+
+void			set_system_intr_gate(uint8_t n, void* addr) // interrupt DPL = 3
+{
+	idt_set_descriptor(addr, 0xEE, (idt_entry_t *)(IDTBASE + n * 8));
+}
+
+void			set_trap_gate(uint8_t n, void* addr) // trap DPL = 0
+{
+	idt_set_descriptor(addr, 0x8F, (idt_entry_t *)(IDTBASE + n * 8));
+}
+
+void irq_disable()
+{
+	__asm__ volatile ("cli"); // unset the interrupt flag
+}
+
+void irq_enable()
+{
 	__asm__ volatile ("sti"); // set the interrupt flag
 }

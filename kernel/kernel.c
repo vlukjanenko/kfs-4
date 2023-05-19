@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 19:00:59 by majosue           #+#    #+#             */
-/*   Updated: 2023/05/18 02:58:19 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/19 08:49:05 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "multiboot.h"
 #include "memory.h"
 #include "IDT.h"
+#include "isr.h"
 
 void	print_stack(void)
 {
@@ -163,6 +164,13 @@ void vmalloc_test()
 	print_vmalloc_list();
 }
 
+int divide_by_zero()
+{
+	int a = 0;
+
+	return (1 / a);
+}
+
 int	main(void)
 {
 	memory_init();
@@ -188,6 +196,15 @@ int	main(void)
 	//get_page_test();
 	vmalloc_test();
 	enable_cursor(0, 15);
+	set_intr_gate(0, interrupt_handler_stub);
+	set_intr_gate(32, timer_isr);
+	//divide_by_zero();
+	irq_disable();
+	irq_enable();
+	irq_set_mask(1);
+	irq_clear_mask(1);
+	irq_clear_mask(0); // timer
+	irq_set_mask(0);
 	printf("$ ");
 	while(1) {
 		asm("hlt\n\t");

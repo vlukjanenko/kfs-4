@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 20:04:32 by majosue           #+#    #+#             */
-/*   Updated: 2023/02/09 13:57:01 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/19 08:47:48 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,8 @@ __attribute__((interrupt))
 void	simd_coprocessor_error(struct interrupt_frame* frame);
 __attribute__((interrupt))
 void	keyboard_isr(struct interrupt_frame* frame);
+__attribute__((interrupt))
+void	timer_isr(struct interrupt_frame* frame);
+
 
 #endif

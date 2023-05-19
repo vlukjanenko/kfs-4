@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 13:23:03 by majosue           #+#    #+#             */
-/*   Updated: 2023/05/17 14:07:39 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/19 08:39:40 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,32 @@ void PIC_remap(int offset1, int offset2)
 	outb(PIC1_DATA, a1);						// restore saved masks.
 	outb(PIC2_DATA, a2);
 */
+}
+
+void irq_set_mask(unsigned char irq_line) {
+    uint16_t port;
+    uint8_t value;
+
+    if(irq_line < 8) {
+        port = PIC1_DATA;
+    } else {
+        port = PIC2_DATA;
+        irq_line -= 8;
+    }
+    value = inb(port) | (1 << irq_line);
+    outb(port, value);
+}
+
+void irq_clear_mask(unsigned char irq_line) {
+    uint16_t port;
+    uint8_t value;
+
+    if(irq_line < 8) {
+        port = PIC1_DATA;
+    } else {
+        port = PIC2_DATA;
+        irq_line -= 8;
+    }
+    value = inb(port) & ~(1 << irq_line);
+    outb(port, value);
 }

@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 12:13:16 by majosue           #+#    #+#             */
-/*   Updated: 2023/05/18 10:16:47 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/19 07:43:12 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,5 @@
 
 void  PIC_remap(int offset1, int offset2);
 void  PIC_sendEOI();
-void  irq_disable(void); // sti
-void  irq_enable(void); // cli
-void  irq_mask(uint8_t n);
-void  irq_unmask(uint8_t n);
 
 #endif
