@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 17:21:42 by majosue           #+#    #+#             */
-/*   Updated: 2023/05/19 11:24:29 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/19 12:55:01 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 void panic(char* str)
 {
 	printf("Kernel panic: %s\n", str);
+	save_stack();
 	__asm__ volatile ("cli; hlt");
 }
 

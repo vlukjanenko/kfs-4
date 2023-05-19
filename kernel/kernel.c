@@ -6,7 +6,7 @@
 /*   By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 19:00:59 by majosue           #+#    #+#             */
-/*   Updated: 2023/05/19 11:35:40 by majosue          ###   ########.fr       */
+/*   Updated: 2023/05/19 12:59:24 by majosue          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ int	main(void)
 	terminal_initialize(VGA_COLOR_WHITE, VGA_COLOR_BLACK);
 	enable_cursor(0, 15);
 
-	set_intr_gate(0, interrupt_handler_stub);
 	set_intr_gate(32, timer_isr);
 	//divide_by_zero();
 	irq_disable();

@@ -6,7 +6,7 @@
 #    By: majosue <majosue@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/12 21:25:37 by majosue           #+#    #+#              #
-#    Updated: 2023/05/18 02:42:14 by majosue          ###   ########.fr        #
+#    Updated: 2023/05/19 12:50:50 by majosue          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ SRC = boot/boot.s kernel/kernel.c  lib/baselib.c kernel/screen.c kernel/GDT.c \
 lib/ports.s kernel/keyboard.c lib/printf.c lib/print_memory.c lib/m_dump.c \
 boot/get_memory_map.c kernel/IDT.c kernel/isr.c kernel/pic.c kernel/get_frame.c \
 boot/paging.s kernel/paging.c kernel/memory.c kernel/get_page.c kernel/kmalloc.c \
-kernel/vmalloc.c kernel/keyboard_isr.c
+kernel/vmalloc.c kernel/keyboard_isr.c kernel/save_stack.c
 OBJECTS := $(SRC:%.c=%.o)
 OBJECTS := $(OBJECTS:%.s=%.o)
 DPS := $(OBJECTS:%.o=%.d)
