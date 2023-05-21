@@ -19,7 +19,8 @@ void panic(char* str)
 {
 	printf("Kernel panic: %s\n", str);
 	save_stack();
-	__asm__ volatile ("cli; hlt");
+	clean_regs_hlt();
+	//__asm__ volatile ("cli; hlt");
 }
 
 void	interrupt_handler_stub(struct interrupt_frame* frame)

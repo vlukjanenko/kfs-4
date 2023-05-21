@@ -51,6 +51,7 @@ int	main(void)
 	irq_clear_mask(1);
 	irq_clear_mask(0); // timer
 	irq_set_mask(0);
+	
 	printf("$ ");
 	while(1) {
 		asm("hlt\n\t");
